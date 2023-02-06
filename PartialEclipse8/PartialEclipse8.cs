@@ -40,16 +40,20 @@ namespace PartialEclipse8
                 x => x.MatchLdarg(0),
                 x => x.MatchLdfld<HealthComponent>("body"),
                 x => x.MatchCallvirt<CharacterBody>("get_teamComponent"),
-                x => x.MatchCallvirt<TeamComponent>("get_teamIndex"),
+                x => x.MatchCallvirt<TeamComponent  >("get_teamIndex"),
                 x => x.MatchLdcI4(1)
                 );
             Chat.AddMessage(c.Index.ToString());
             c.Emit(OpCodes.Ldarg_0);
             c.EmitDelegate<Action<CharacterMaster>>(test2);
-            c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<CharacterMaster, bool>>(ShouldTakeCurse);
-            var end = c.Next.Next.Next.Next.Next.Next.Next.Next.Next.Next.Operand;
-            c.Emit(OpCodes.Brfalse_S, end);
+            //c.Emit(OpCodes.Ldarg_0);
+            //c.EmitDelegate<Func<CharacterMaster, bool>>(ShouldTakeCurse);
+            //var end = c.Index + 10;
+            //c.Emit(OpCodes.Brfalse_S, end);
+            c.Emit(OpCodes.Ldloc, 42);
+            c.EmitDelegate<Func<CharacterMaster, bool>>(new Func<CharacterMaster, bool>(PartialEclipse8Plugin.ShouldTakeCurse));
+            object end = c.Next.Next.Next.Next.Next.Next.Next.Next.Next.Next.Operand;
+            c.Emit(OpCodes.Brtrue, end);
         }
 
         public static bool ShouldTakeCurse(CharacterMaster master)
@@ -57,9 +61,11 @@ namespace PartialEclipse8
             Chat.AddMessage("ahhhhh");
             if (votedForEclipse.Any(el => el.master == master))
             {
-                return false;
+                Chat.AddMessage("found person");
+                return true;
             }
-            return true;
+            Chat.AddMessage("did not find person");
+            return false;
         }
 
         public static void test(CharacterMaster master)
