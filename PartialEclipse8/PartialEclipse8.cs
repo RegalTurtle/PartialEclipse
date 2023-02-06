@@ -32,10 +32,7 @@ namespace PartialEclipse8
 
         private static void TakeDamage(ILContext il)
         {
-            Chat.AddMessage("IL Hook");
             var c = new ILCursor(il);
-            c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Action<CharacterMaster>>(test);
             c.GotoNext(
                 x => x.MatchLdarg(0),
                 x => x.MatchLdfld<HealthComponent>("body"),
@@ -43,44 +40,44 @@ namespace PartialEclipse8
                 x => x.MatchCallvirt<TeamComponent  >("get_teamIndex"),
                 x => x.MatchLdcI4(1)
                 );
-            Chat.AddMessage(c.Index.ToString());
-            c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Action<CharacterMaster>>(test2);
             //c.Emit(OpCodes.Ldarg_0);
             //c.EmitDelegate<Func<CharacterMaster, bool>>(ShouldTakeCurse);
             //var end = c.Index + 10;
             //c.Emit(OpCodes.Brfalse_S, end);
             c.Emit(OpCodes.Ldloc, 42);
-            c.EmitDelegate<Func<CharacterMaster, bool>>(new Func<CharacterMaster, bool>(PartialEclipse8Plugin.ShouldTakeCurse));
-            object end = c.Next.Next.Next.Next.Next.Next.Next.Next.Next.Next.Operand;
-            c.Emit(OpCodes.Brtrue, end);
+            c.Emit(OpCodes.Ldloc, 7);
+            c.Emit(OpCodes.Ldarg_0);
+            //c.EmitDelegate<Func<CharacterMaster, bool>>(new Func<CharacterMaster, bool>(PartialEclipse8Plugin.ShouldTakeCurse));
+            c.EmitDelegate<Action<CharacterMaster, float, HealthComponent>>(NewTakeCurse);
+            //object end = c.Next.Next.Next.Next.Next.Next.Next.Next.Next.Next.Operand;
+            //c.Emit(OpCodes.Brtrue, end);
         }
 
         public static bool ShouldTakeCurse(CharacterMaster master)
         {
-            Chat.AddMessage("ahhhhh");
             if (votedForEclipse.Any(el => el.master == master))
             {
-                Chat.AddMessage("found person");
                 return true;
             }
-            Chat.AddMessage("did not find person");
             return false;
         }
 
-        public static void test(CharacterMaster master)
+        public static void NewTakeCurse(CharacterMaster master, float num, HealthComponent that)
         {
-            Chat.AddMessage(master.GetType().ToString());
-        }
-
-        public static void test2(CharacterMaster master)
-        {
-            Chat.AddMessage("fuck me2");
+            if (votedForEclipse.Any(el => el.master == master))
+            {
+                float num13 = num / that.fullCombinedHealth * 100f;
+                float num14 = 0.4f;
+                int num15 = Mathf.FloorToInt(num13 * num14);
+                for (int k = 0; k < num15; k++)
+                {
+                    that.body.AddBuff(RoR2Content.Buffs.PermanentCurse);
+                }
+            }
         }
 
         private static void PreGameControllerStartRun(Action<PreGameController> orig, PreGameController self)
         {
-            Chat.AddMessage("pregame");
             votedForEclipse.Clear();
             var choice = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse8.On");
             foreach (var user in NetworkUser.readOnlyInstancesList)
@@ -91,7 +88,6 @@ namespace PartialEclipse8
                 if (isMetamorphosisVoted)
                 {
                     votedForEclipse.Add(user);
-                    Chat.AddMessage("arti");
                 }
             }
             orig(self);
