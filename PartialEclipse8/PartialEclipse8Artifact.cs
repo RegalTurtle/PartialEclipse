@@ -24,9 +24,6 @@ public class PartialEclipse8Artifact
         artifact.descriptionToken = "PARTIALECLIPSE_PARTIALECLIPSE8_DESC";
         artifact.smallIconSelectedSprite = CreateSprite(null, Color.magenta);
         artifact.smallIconDeselectedSprite = CreateSprite(null, Color.gray);
-        //artifact.smallIconDeselectedSprite = RiskyArtifactsPlugin.assetBundle.LoadAsset<Sprite>("texArrogDisabled.png");
-        //artifact.smallIconSelectedSprite = RiskyArtifactsPlugin.assetBundle.LoadAsset<Sprite>("texArrogEnabled.png");
-        //RiskyArtifactsPlugin.FixScriptableObjectName(artifact);
         ContentAddition.AddArtifactDef(artifact);
     }
 

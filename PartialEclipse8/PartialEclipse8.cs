@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Security.Permissions;
 using R2API;
 using UnityEngine;
+using MonoMod.Cil;
+using Mono.Cecil.Cil;
 
 [assembly: AssemblyVersion(PartialEclipse8.PartialEclipse8Plugin.Version)]
 namespace PartialEclipse8
@@ -22,6 +24,22 @@ namespace PartialEclipse8
         public const string Version = "0.0.0";
 
         private static readonly HashSet<NetworkUser> votedForEclipse = new HashSet<NetworkUser>();
+
+        private static void TakeDamage(ILContext il)
+        {
+            var c = new ILCursor(il);
+            c.GotoNext(x => x.MatchCall(typeof(RoR2Content.Artifacts), "get_randomSurvivorOnRespawnArtifactDef"));
+            c.Index += 3;
+            var endIf = c.Previous.Operand;
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Func<CharacterMaster, bool>>(ShouldTakeCurse);
+            c.Emit(OpCodes.Brfalse_S, endIf);
+        }
+
+        public static bool ShouldTakeCurse(CharacterMaster master)
+        {
+            return true;
+        }
 
         private static void PreGameControllerStartRun(Action<PreGameController> orig, PreGameController self)
         {
