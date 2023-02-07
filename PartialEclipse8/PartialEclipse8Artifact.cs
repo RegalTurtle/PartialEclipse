@@ -1,17 +1,22 @@
-﻿using R2API;
+﻿using IL.RoR2.Projectile;
+using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
 
-
 public class PartialEclipse8Artifact
 {
     public static ArtifactDef artifact;
+
+    private static global::System.Resources.ResourceManager resourceMan;
+    private static global::System.Globalization.CultureInfo resourceCulture;
 
     public PartialEclipse8Artifact()
     {
@@ -24,27 +29,107 @@ public class PartialEclipse8Artifact
         artifact.descriptionToken = "PARTIALECLIPSE_PARTIALECLIPSE8_DESC";
         //artifact.smallIconSelectedSprite = CreateSprite(null, Color.magenta);
         //artifact.smallIconDeselectedSprite = CreateSprite(null, Color.gray);
-        artifact.smallIconSelectedSprite = CreateSpriteNew("E8_selected.png");
-        artifact.smallIconDeselectedSprite = CreateSpriteNew("E8_deselected.png");
+        artifact.smallIconSelectedSprite = CreateSpriteNew("C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse8\\selected.png");
+        artifact.smallIconDeselectedSprite = CreateSpriteNew("C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse8\\deselected.png");
         ContentAddition.AddArtifactDef(artifact);
     }
 
     public static Sprite CreateSpriteNew(String fileName)
     {
-        Texture2D img = Resources.Load(fileName) as Texture2D;
-        byte[] resBytes = img.GetRawTextureData();
+        //Texture2D img = Resources.Load(fileName) as Texture2D;
+        byte[] resBytes = (byte[])
 
-        Chat.AddMessage("1");
+        //String deselected = @"~\deselected.png";
+        //Debug.Log(deselected);
+        //Texture2D img2 = LoadPNG(fileName);
+        //Debug.Log(System.IO.Path.);
+        //Texture2D img3 = Resources.Load("Assets/selected") as Texture2D;
+        //Debug.Log(img3 != null);
+        //byte[] resBytes = img.GetRawTextureData();
+        //Image i = Image.FromFile(fileName);
 
-        var tex = new Texture2D(32, 32, TextureFormat.RGBA32, false);
-        Chat.AddMessage("2");
-        tex.LoadImage(resBytes, false);
-        tex.Apply();
-        CleanAlpha(tex);
-        Chat.AddMessage("3");
+        //var myIcon = Resources.selected;
 
-        return Sprite.Create(tex, new Rect(0, 0, 128, 128), new Vector2(64, 64));
+        //Image i = null;
+
+        byte[] byteArray = ((byte[])(obj));
+
+        Texture2D imgFinal = new Texture2D(2, 2);
+        imgFinal.LoadImage(byteArray);
+
+        //Debug.Log(img2 == null);
+
+        //var tex = new Texture2D(32, 32, TextureFormat.RGBA32, false);
+        //Chat.AddMessage("2");
+        //tex.LoadImage(resBytes, false);
+        //tex.Apply();
+        //CleanAlpha(tex);
+        //Chat.AddMessage("3");
+
+        //return CreateSprite(null, Color.magenta);
+        return Sprite.Create(imgFinal, new Rect(0, 0, imgFinal.width, imgFinal.height), new Vector2(64, 64));
     }
+
+    private static Texture2D LoadPNG(string filePath)
+    {
+
+        Texture2D tex = null;
+        tex = new Texture2D(32, 32, TextureFormat.RGBA32, false);
+        byte[] fileData;
+        //FillTexture(tex, Color.cyan);
+
+        if (System.IO.File.Exists(filePath))
+        {
+            fileData = System.IO.File.ReadAllBytes(filePath);
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+            Debug.Log(fileData.ToString());
+        }
+        return tex;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static Sprite CreateSprite(byte[] resourceBytes, Color fallbackColor)
     {
