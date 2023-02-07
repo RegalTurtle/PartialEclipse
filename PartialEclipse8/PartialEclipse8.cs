@@ -1,10 +1,8 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using RoR2;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Security.Permissions;
 using R2API;
 using UnityEngine;
 using MonoMod.Cil;
@@ -23,7 +21,7 @@ namespace PartialEclipse8
     {
         public const string GUID = "com.RegalTurtle.PartialEclipse";
         public const string Name = "Partial Eclipse";
-        public const string Version = "0.0.0";
+        public const string Version = "1.0.0";
 
         private static readonly HashSet<NetworkUser> votedForEclipse = new HashSet<NetworkUser>();
 
