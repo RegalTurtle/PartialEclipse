@@ -22,9 +22,28 @@ public class PartialEclipse8Artifact
         artifact.cachedName = "PartialEclipse8";
         artifact.nameToken = "PARTIALECLIPSE_PARTIALECLIPSE8_NAME";
         artifact.descriptionToken = "PARTIALECLIPSE_PARTIALECLIPSE8_DESC";
-        artifact.smallIconSelectedSprite = CreateSprite(null, Color.magenta);
-        artifact.smallIconDeselectedSprite = CreateSprite(null, Color.gray);
+        //artifact.smallIconSelectedSprite = CreateSprite(null, Color.magenta);
+        //artifact.smallIconDeselectedSprite = CreateSprite(null, Color.gray);
+        artifact.smallIconSelectedSprite = CreateSpriteNew("E8_selected.png");
+        artifact.smallIconDeselectedSprite = CreateSpriteNew("E8_deselected.png");
         ContentAddition.AddArtifactDef(artifact);
+    }
+
+    public static Sprite CreateSpriteNew(String fileName)
+    {
+        Texture2D img = Resources.Load(fileName) as Texture2D;
+        byte[] resBytes = img.GetRawTextureData();
+
+        Chat.AddMessage("1");
+
+        var tex = new Texture2D(32, 32, TextureFormat.RGBA32, false);
+        Chat.AddMessage("2");
+        tex.LoadImage(resBytes, false);
+        tex.Apply();
+        CleanAlpha(tex);
+        Chat.AddMessage("3");
+
+        return Sprite.Create(tex, new Rect(0, 0, 128, 128), new Vector2(64, 64));
     }
 
     public static Sprite CreateSprite(byte[] resourceBytes, Color fallbackColor)
@@ -49,7 +68,21 @@ public class PartialEclipse8Artifact
             FillTexture(tex, fallbackColor);
         }
 
-        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(31, 31));
+        //return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(31, 31));
+
+        try
+        {
+            //byte[] resBytes = (byte[])Resources.ResourceManager.GetObject(resName);
+            //tex.LoadImage(resBytes, false);
+            tex.Apply();
+
+            //sprite = Sprite.Create(tex, new Rect(0, 0, 128, 128), new Vector2(64, 64));
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.ToString());
+        }
+        return null;
     }
 
     private static Texture2D FillTexture(Texture2D tex, Color color)
@@ -81,5 +114,26 @@ public class PartialEclipse8Artifact
         tex.Apply();
 
         return tex;
+    }
+
+    public static Sprite LoadResourceSprite(string resName)
+    {
+        Texture2D tex = new Texture2D(128, 128, TextureFormat.RGBA32, false);
+        Sprite sprite = null;
+
+        try
+        {
+            //byte[] resBytes = (byte[])Properties.Resources.ResourceManager.GetObject(resName);
+            //tex.LoadImage(resBytes, false);
+            tex.Apply();
+
+            sprite = Sprite.Create(tex, new Rect(0, 0, 128, 128), new Vector2(64, 64));
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.ToString());
+        }
+
+        return sprite;
     }
 }
