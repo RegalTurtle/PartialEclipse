@@ -83,9 +83,9 @@ namespace PartialEclipse8
             foreach (var user in NetworkUser.readOnlyInstancesList)
             {
                 var voteController = PreGameRuleVoteController.FindForUser(user);
-                var isMetamorphosisVoted = voteController.IsChoiceVoted(choice);
+                var isEclipseVoted = voteController.IsChoiceVoted(choice);
 
-                if (isMetamorphosisVoted)
+                if (isEclipseVoted)
                 {
                     votedForEclipse.Add(user);
                 }
