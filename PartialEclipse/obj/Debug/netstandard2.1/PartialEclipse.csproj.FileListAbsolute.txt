@@ -1,0 +1,12 @@
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.AssemblyInfoInputs.cache
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.AssemblyInfo.cs
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.CoreCompileInputs.cache
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.dll
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.pdb
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\bin\Debug\netstandard2.1\PartialEclipse.deps.json
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\bin\Debug\netstandard2.1\PartialEclipse.dll
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\bin\Debug\netstandard2.1\PartialEclipse.pdb
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.GenerateResource.cache
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.Properties.Resources.resources
+C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.AssemblyReference.cache
