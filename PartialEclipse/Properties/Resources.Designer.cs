@@ -63,6 +63,66 @@ namespace PartialEclipse.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] E1_deselected {
+            get {
+                object obj = ResourceManager.GetObject("E1_deselected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] E1_selected {
+            get {
+                object obj = ResourceManager.GetObject("E1_selected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] E3_deselected {
+            get {
+                object obj = ResourceManager.GetObject("E3_deselected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] E3_selected {
+            get {
+                object obj = ResourceManager.GetObject("E3_selected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] E5_deselected {
+            get {
+                object obj = ResourceManager.GetObject("E5_deselected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] E5_selected {
+            get {
+                object obj = ResourceManager.GetObject("E5_selected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] E8_deselected {
             get {
                 object obj = ResourceManager.GetObject("E8_deselected", resourceCulture);

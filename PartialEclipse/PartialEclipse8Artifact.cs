@@ -11,7 +11,7 @@ namespace PartialEclipse
 
         public PartialEclipse8Artifact()
         {
-            LanguageAPI.Add("PARTIALECLIPSE_PARTIALECLIPSE8_NAME", "Artifact of Partial Eclipse");
+            LanguageAPI.Add("PARTIALECLIPSE_PARTIALECLIPSE8_NAME", "Artifact of Partial Eclipse 8");
             LanguageAPI.Add("PARTIALECLIPSE_PARTIALECLIPSE8_DESC", "Applies Eclipse 8 for people who select the artifact.");
 
             artifact = ScriptableObject.CreateInstance<ArtifactDef>();

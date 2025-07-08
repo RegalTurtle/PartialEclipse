@@ -12,11 +12,6 @@ using System.Linq;
 
 namespace PartialEclipse
 {
-    // This is an example plugin that can be put in
-    // BepInEx/plugins/ExamplePlugin/ExamplePlugin.dll to test out.
-    // It's a small plugin that adds a relatively simple item to the game,
-    // and gives you that item whenever you press F2.
-
     // This attribute specifies that we have a dependency on a given BepInEx Plugin,
     // We need the R2API ItemAPI dependency because we are using for adding our item to the game.
     // You don't need this if you're not using R2API in your plugin,
@@ -45,38 +40,138 @@ namespace PartialEclipse
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "RegalTurtle";
         public const string PluginName = "PartialEclipse";
-        public const string PluginVersion = "0.0.1";
+        public const string PluginVersion = "1.3.1";
 
+        private static readonly HashSet<NetworkUser> votedForEclipse1 = new();
+        private static readonly HashSet<NetworkUser> votedForEclipse3 = new();
+        private static readonly HashSet<NetworkUser> votedForEclipse5 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse8 = new();
 
-        private static readonly MethodInfo damage = typeof(HealthComponent).GetMethod(nameof(HealthComponent.TakeDamageProcess), BindingFlags.NonPublic | BindingFlags.Instance);
+        // This gets anything to work at all
         private static readonly MethodInfo startRun = typeof(PreGameController).GetMethod(nameof(PreGameController.StartRun), BindingFlags.NonPublic | BindingFlags.Instance);
+        // For Eclipse 1
+        private static readonly MethodInfo onBodyStart = typeof(CharacterMaster).GetMethod(nameof(CharacterMaster.OnBodyStart), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        // For Eclipse 3
+        // This one should work with BindingFlags.Public
+        private static readonly MethodInfo onCharacterHitGroundServer = typeof(GlobalEventManager).GetMethod(nameof(GlobalEventManager.OnCharacterHitGroundServer), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        // For Eclipse 5
+        private static readonly MethodInfo heal = typeof(HealthComponent).GetMethod(nameof(HealthComponent.Heal), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        // For Eclipse 8
+        private static readonly MethodInfo damage = typeof(HealthComponent).GetMethod(nameof(HealthComponent.TakeDamageProcess), BindingFlags.NonPublic | BindingFlags.Instance);
 
+        // Eclipse 1 modification
+        private static void OnBodyStart(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse1),
+                x => x.MatchBlt(out _)))
+            {
+                Log.Error("PartialEclipse: Failed to find Eclipse check");
+                return;
+            }
+
+            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+
+            c.Index--;
+
+            c.Emit(OpCodes.Ldarg_0); // load 'this' for the CharacterMaster
+            c.EmitDelegate<Func<CharacterMaster, bool>>(selfMaster => {
+                return votedForEclipse1.Any(el => el.master == selfMaster);
+            });
+
+            c.Emit(OpCodes.Brtrue_S, eclipseBehavior); // if false, branch to the elseLabel health = fullHealth line
+        }
+
+        // Eclipse 3 modification
+        private static void OnCharacterHitGroundServerEdit(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse3),
+                x => x.MatchBlt(out _)))
+            {
+                Log.Error("PartialEclipse: Failed to find Eclipse check");
+                return;
+            }
+            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+
+            c.Index--;
+
+            c.Emit(OpCodes.Ldarg_1);
+            c.EmitDelegate<Func<CharacterBody, bool>>(selfCharacterBody => {
+                return votedForEclipse3.Any(el => el.master == selfCharacterBody.master);
+            });
+
+            c.Emit(OpCodes.Brtrue_S, eclipseBehavior);
+        }
+
+        // Eclipse 5 modification
+        private static void Heal(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse5),
+                x => x.MatchBlt(out _)))
+            {
+                Log.Error("PartialEclipse: Failed to find Eclipse check");
+                return;
+            }
+            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+
+            c.Index--;
+
+            c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent => {
+                return votedForEclipse5.Any(el => el.master == selfHealthComponent.body.master);
+            });
+
+            c.Emit(OpCodes.Brtrue_S, eclipseBehavior);
+        }
+
+        public static float NewHalfHealing(HealthComponent that, float healAmount)
+        {
+            if (votedForEclipse5.Any(el => el.master == that.body.master))
+            {
+                return healAmount / 2f;
+            }
+            return healAmount;
+        }
+
+        // Eclipse 8 modification
         private static void TakeDamageProcess(ILContext il)
         {
-            // Log.Info($"Applying IL Hook");
-
             var c = new ILCursor(il);
-            c.GotoNext(
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<HealthComponent>("body"),
-                x => x.MatchCallvirt<CharacterBody>("get_teamComponent"),
-                x => x.MatchCallvirt<TeamComponent>("get_teamIndex"),
-                x => x.MatchLdcI4(1)
-            );
 
-            c.Emit(OpCodes.Ldloc, 61);
-            c.Emit(OpCodes.Ldloc, 8);
+            if (!c.TryGotoNext(
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse8),
+                x => x.MatchBlt(out _)))
+            {
+                Log.Error("PartialEclipse: Failed to find Eclipse check");
+                return;
+            }
+
+            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+
+            c.Index--;
+
             c.Emit(OpCodes.Ldarg_0);
+            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent => {
+                return votedForEclipse8.Any(el => el.master == selfHealthComponent.body.master);
+            });
 
-            c.EmitDelegate<Action<CharacterMaster, float, HealthComponent>>(NewTakeCurse);
-
-            // Log.Info($"Done applying IL Hook");
+            c.Emit(OpCodes.Brtrue_S, eclipseBehavior);
         }
 
         public static void NewTakeCurse(CharacterMaster master, float damageAmount, HealthComponent that)
         {
-            // Log.Info($"Damage taken and hook used");
             // If any of the people that voted for eclipse match the master of the object taking damage, apply curse
             if (votedForEclipse8.Any(el => el.master == master))
             {
@@ -92,14 +187,38 @@ namespace PartialEclipse
 
         private static void PreGameControllerStartRun(Action<PreGameController> orig, PreGameController self)
         {
+            votedForEclipse1.Clear();
+            votedForEclipse3.Clear();
+            votedForEclipse5.Clear();
             votedForEclipse8.Clear();
-            var choice = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse8.On");
+            var choice1 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse1.On");
+            var choice3 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse3.On");
+            var choice5 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse5.On");
+            var choice8 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse8.On");
             foreach (var user in NetworkUser.readOnlyInstancesList)
             {
                 var voteController = PreGameRuleVoteController.FindForUser(user);
-                var isMetamorphosisVoted = voteController.IsChoiceVoted(choice);
 
-                if (isMetamorphosisVoted)
+                var isEclipse1Voted = voteController.IsChoiceVoted(choice1);
+                if (isEclipse1Voted)
+                {
+                    votedForEclipse1.Add(user);
+                }
+
+                var isEclipse3Voted = voteController.IsChoiceVoted(choice3);
+                if (isEclipse3Voted)
+                {
+                    votedForEclipse3.Add(user);
+                }
+
+                var isEclipse5Voted = voteController.IsChoiceVoted(choice5);
+                if (isEclipse5Voted)
+                {
+                    votedForEclipse5.Add(user);
+                }
+
+                var isEclipse8Voted = voteController.IsChoiceVoted(choice8);
+                if (isEclipse8Voted)
                 {
                     votedForEclipse8.Add(user);
                 }
@@ -110,20 +229,40 @@ namespace PartialEclipse
 
         public void Awake()
         {
-            // Log.Init(Logger);
+            Log.Init(Logger);
 
+            new PartialEclipse1Artifact();
+            new PartialEclipse3Artifact();
+            new PartialEclipse5Artifact();
             new PartialEclipse8Artifact();
         }
 
         public void Destroy()
         {
-            HookEndpointManager.Unmodify(damage, (ILContext.Manipulator)TakeDamageProcess);
+            // For finding who voted for what
+            HookEndpointManager.Remove(startRun, PreGameControllerStartRun);
+            // For Eclipse 1
+            HookEndpointManager.Unmodify(onBodyStart, OnBodyStart);
+            // For Eclipse 3
+            HookEndpointManager.Unmodify(onCharacterHitGroundServer, OnCharacterHitGroundServerEdit);
+            // For Eclipse 5
+            HookEndpointManager.Unmodify(heal, Heal);
+            // For Eclipse 8
+            HookEndpointManager.Unmodify(damage, TakeDamageProcess);
         }
 
         public void Start()
         {
-            HookEndpointManager.Add(startRun, (Action<Action<PreGameController>, PreGameController>)PreGameControllerStartRun);
-            HookEndpointManager.Modify(damage, (ILContext.Manipulator)TakeDamageProcess);
+            // For finding who voted for what
+            HookEndpointManager.Add(startRun, PreGameControllerStartRun);
+            // For Eclipse 1
+            HookEndpointManager.Modify(onBodyStart, OnBodyStart);
+            // For Eclipse 3
+            HookEndpointManager.Modify(onCharacterHitGroundServer, OnCharacterHitGroundServerEdit);
+            // For Eclipse 5
+            HookEndpointManager.Modify(heal, Heal);
+            // For Eclipse 8
+            HookEndpointManager.Modify(damage, TakeDamageProcess);
         }
     }
 }

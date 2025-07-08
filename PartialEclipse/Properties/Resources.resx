@@ -118,6 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="E1_deselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E1_deselected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="E1_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E1_selected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="E3_deselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E3_deselected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="E3_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E3_selected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="E5_deselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E5_deselected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="E5_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E5_selected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="E8_deselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\E8_deselected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
