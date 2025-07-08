@@ -18,6 +18,9 @@ namespace PartialEclipse
     // it's just to tell BepInEx to initialize R2API before this plugin so it's safe to use R2API.
     [BepInDependency(ItemAPI.PluginGUID)]
 
+    // Soft dependancy for EclipseArtifacts
+    [BepInDependency("Judgy.EclipseArtifacts", BepInDependency.DependencyFlags.SoftDependency)]
+
     // This one is because we use a .language file for language tokens
     // More info in https://risk-of-thunder.github.io/R2Wiki/Mod-Creation/Assets/Localization/
     [BepInDependency(LanguageAPI.PluginGUID)]
@@ -40,12 +43,15 @@ namespace PartialEclipse
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "RegalTurtle";
         public const string PluginName = "PartialEclipse";
-        public const string PluginVersion = "1.3.1";
+        public const string PluginVersion = "1.3.2";
 
+        // HashSets for who voted for what
         private static readonly HashSet<NetworkUser> votedForEclipse1 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse3 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse5 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse8 = new();
+
+        public static bool EclipseArtifactsInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Judgy.EclipseArtifacts");
 
         // This gets anything to work at all
         private static readonly MethodInfo startRun = typeof(PreGameController).GetMethod(nameof(PreGameController.StartRun), BindingFlags.NonPublic | BindingFlags.Instance);
@@ -64,21 +70,41 @@ namespace PartialEclipse
         {
             var c = new ILCursor(il);
 
-            if (!c.TryGotoNext(
-                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse1),
-                x => x.MatchBlt(out _)))
-            {
-                Log.Error("PartialEclipse: Failed to find Eclipse check");
-                return;
-            }
+            Instruction eclipseBehavior;
 
-            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            // Behavior here only for EclipseArtifacts installed
+            if (EclipseArtifactsInstalled)
+            {
+                if (!c.TryGotoNext(
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
+                {
+                    Log.Error("Failed to find Eclipse 1 check, EclipseArtifacts loaded");
+                    return;
+                }
+
+                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
+                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
+            }
+            // Typical behavior
+            else
+            {
+                if (!c.TryGotoNext( // default behavior
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse1),
+                    x => x.MatchBlt(out _)))
+                {
+                    Log.Error("Failed to find Eclipse 1 check");
+                    return;
+                }
+
+                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            }
 
             c.Index--;
 
             c.Emit(OpCodes.Ldarg_0); // load 'this' for the CharacterMaster
-            c.EmitDelegate<Func<CharacterMaster, bool>>(selfMaster => {
+            c.EmitDelegate<Func<CharacterMaster, bool>>(selfMaster =>
+            {
                 return votedForEclipse1.Any(el => el.master == selfMaster);
             });
 
@@ -90,20 +116,41 @@ namespace PartialEclipse
         {
             var c = new ILCursor(il);
 
-            if (!c.TryGotoNext(
-                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse3),
-                x => x.MatchBlt(out _)))
+            Instruction eclipseBehavior;
+
+            // Behavior here only for EclipseArtifacts installed
+            if (EclipseArtifactsInstalled)
             {
-                Log.Error("PartialEclipse: Failed to find Eclipse check");
-                return;
+                if (!c.TryGotoNext(
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
+                {
+                    Log.Error("Failed to find Eclipse 3 check, EclipseArtifacts loaded");
+                    return;
+                }
+
+                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
+                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
             }
-            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            // Typical behavior
+            else
+            {
+                if (!c.TryGotoNext( // default behavior
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse3),
+                    x => x.MatchBlt(out _)))
+                {
+                    Log.Error("Failed to find Eclipse 3 check");
+                    return;
+                }
+
+                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            }
 
             c.Index--;
 
             c.Emit(OpCodes.Ldarg_1);
-            c.EmitDelegate<Func<CharacterBody, bool>>(selfCharacterBody => {
+            c.EmitDelegate<Func<CharacterBody, bool>>(selfCharacterBody =>
+            {
                 return votedForEclipse3.Any(el => el.master == selfCharacterBody.master);
             });
 
@@ -115,20 +162,41 @@ namespace PartialEclipse
         {
             var c = new ILCursor(il);
 
-            if (!c.TryGotoNext(
-                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse5),
-                x => x.MatchBlt(out _)))
+            Instruction eclipseBehavior;
+
+            // Behavior here only for EclipseArtifacts installed
+            if (EclipseArtifactsInstalled)
             {
-                Log.Error("PartialEclipse: Failed to find Eclipse check");
-                return;
+                if (!c.TryGotoNext(
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
+                {
+                    Log.Error("Failed to find Eclipse 5 check, EclipseArtifacts loaded");
+                    return;
+                }
+
+                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
+                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
             }
-            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            // Typical behavior
+            else
+            {
+                if (!c.TryGotoNext( // default behavior
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse5),
+                    x => x.MatchBlt(out _)))
+                {
+                    Log.Error("Failed to find Eclipse 5 check");
+                    return;
+                }
+
+                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            }
 
             c.Index--;
 
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent => {
+            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent =>
+            {
                 return votedForEclipse5.Any(el => el.master == selfHealthComponent.body.master);
             });
 
@@ -149,21 +217,41 @@ namespace PartialEclipse
         {
             var c = new ILCursor(il);
 
-            if (!c.TryGotoNext(
-                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse8),
-                x => x.MatchBlt(out _)))
-            {
-                Log.Error("PartialEclipse: Failed to find Eclipse check");
-                return;
-            }
+            Instruction eclipseBehavior;
 
-            var eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            // Behavior here only for EclipseArtifacts installed
+            if (EclipseArtifactsInstalled)
+            {
+                if (!c.TryGotoNext(
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
+                {
+                    Log.Error("Failed to find Eclipse 8 check, EclipseArtifacts loaded");
+                    return;
+                }
+
+                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
+                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
+            }
+            // Typical behavior
+            else
+            {
+                if (!c.TryGotoNext( // default behavior
+                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse8),
+                    x => x.MatchBlt(out _)))
+                {
+                    Log.Error("Failed to find Eclipse 8 check");
+                    return;
+                }
+
+                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+            }
 
             c.Index--;
 
             c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent => {
+            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent =>
+            {
                 return votedForEclipse8.Any(el => el.master == selfHealthComponent.body.master);
             });
 

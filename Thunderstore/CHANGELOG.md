@@ -1,3 +1,7 @@
+## 1.3.2
+
+- Added compatibility support for [EclipseArtifacts](https://thunderstore.io/package/Judgy/EclipseArtifacts/)
+
 ## 1.3.1
 
 - Typo
