@@ -30,6 +30,12 @@
           "build/BepInEx.Core.targets": {}
         }
       },
+      "BepInEx.PluginInfoProps/1.1.0": {
+        "type": "package",
+        "build": {
+          "build/_._": {}
+        }
+      },
       "HarmonyX/2.7.0": {
         "type": "package",
         "dependencies": {
@@ -37,10 +43,14 @@
           "System.Reflection.Emit": "4.7.0"
         },
         "compile": {
-          "lib/netstandard2.0/0Harmony.dll": {}
+          "lib/netstandard2.0/0Harmony.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/0Harmony.dll": {}
+          "lib/netstandard2.0/0Harmony.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {
@@ -73,16 +83,55 @@
       "Mono.Cecil/0.11.4": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Mono.Cecil.Mdb.dll": {},
-          "lib/netstandard2.0/Mono.Cecil.Pdb.dll": {},
-          "lib/netstandard2.0/Mono.Cecil.Rocks.dll": {},
-          "lib/netstandard2.0/Mono.Cecil.dll": {}
+          "lib/netstandard2.0/Mono.Cecil.Mdb.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Pdb.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Rocks.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard2.0/Mono.Cecil.dll": {
+            "related": ".Mdb.pdb;.pdb;.Pdb.pdb;.Rocks.pdb"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/Mono.Cecil.Mdb.dll": {},
-          "lib/netstandard2.0/Mono.Cecil.Pdb.dll": {},
-          "lib/netstandard2.0/Mono.Cecil.Rocks.dll": {},
-          "lib/netstandard2.0/Mono.Cecil.dll": {}
+          "lib/netstandard2.0/Mono.Cecil.Mdb.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Pdb.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard2.0/Mono.Cecil.Rocks.dll": {
+            "related": ".pdb"
+          },
+          "lib/netstandard2.0/Mono.Cecil.dll": {
+            "related": ".Mdb.pdb;.pdb;.Pdb.pdb;.Rocks.pdb"
+          }
+        }
+      },
+      "MonoMod/22.5.1.1": {
+        "type": "package",
+        "dependencies": {
+          "Mono.Cecil": "0.11.4",
+          "MonoMod.Utils": "22.5.1.1",
+          "System.Collections.NonGeneric": "4.3.0",
+          "System.ComponentModel.TypeConverter": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Reflection.Emit.ILGeneration": "4.7.0",
+          "System.Reflection.Emit.Lightweight": "4.7.0",
+          "System.Reflection.TypeExtensions": "4.7.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/MonoMod.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/MonoMod.dll": {
+            "related": ".xml"
+          }
         }
       },
       "MonoMod.RuntimeDetour/21.12.13.1": {
@@ -98,13 +147,17 @@
           "System.Reflection.TypeExtensions": "4.7.0"
         },
         "compile": {
-          "lib/netstandard2.0/MonoMod.RuntimeDetour.dll": {}
+          "lib/netstandard2.0/MonoMod.RuntimeDetour.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/MonoMod.RuntimeDetour.dll": {}
+          "lib/netstandard2.0/MonoMod.RuntimeDetour.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "MonoMod.Utils/21.12.13.1": {
+      "MonoMod.Utils/22.5.1.1": {
         "type": "package",
         "dependencies": {
           "Mono.Cecil": "0.11.4",
@@ -116,27 +169,35 @@
           "System.Reflection.TypeExtensions": "4.7.0"
         },
         "compile": {
-          "lib/netstandard2.0/MonoMod.Utils.dll": {}
+          "lib/netstandard2.0/MonoMod.Utils.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/MonoMod.Utils.dll": {}
+          "lib/netstandard2.0/MonoMod.Utils.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "R2API.ContentManagement/1.0.9": {
+      "R2API.ContentManagement/1.0.10": {
         "type": "package",
         "dependencies": {
           "BepInEx.Core": "5.4.19",
-          "MMHOOK.RoR2": "2025.3.4",
+          "MMHOOK.RoR2": "2025.6.3",
           "R2API.Core": "5.1.5",
-          "RiskOfRain2.GameLibs": "1.3.7-r.0",
-          "RoR2BepInExPack": "1.7.0",
+          "RiskOfRain2.GameLibs": "1.3.9-r.0",
+          "RoR2BepInExPack": "1.30.0",
           "UnityEngine.Modules": "2021.3.33"
         },
         "compile": {
-          "lib/netstandard2.1/R2API.ContentManagement.dll": {}
+          "lib/netstandard2.1/R2API.ContentManagement.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.1/R2API.ContentManagement.dll": {}
+          "lib/netstandard2.1/R2API.ContentManagement.dll": {
+            "related": ".xml"
+          }
         }
       },
       "R2API.Core/5.1.5": {
@@ -149,28 +210,14 @@
           "UnityEngine.Modules": "2021.3.33"
         },
         "compile": {
-          "lib/netstandard2.1/R2API.Core.dll": {}
+          "lib/netstandard2.1/R2API.Core.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.1/R2API.Core.dll": {}
-        }
-      },
-      "R2API.Items/1.0.7": {
-        "type": "package",
-        "dependencies": {
-          "BepInEx.Core": "5.4.19",
-          "MMHOOK.RoR2": "2025.6.3",
-          "R2API.ContentManagement": "1.0.9",
-          "R2API.Core": "5.1.5",
-          "RiskOfRain2.GameLibs": "1.3.9-r.0",
-          "RoR2BepInExPack": "1.30.0",
-          "UnityEngine.Modules": "2021.3.33"
-        },
-        "compile": {
-          "lib/netstandard2.1/R2API.Items.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard2.1/R2API.Items.dll": {}
+          "lib/netstandard2.1/R2API.Core.dll": {
+            "related": ".xml"
+          }
         }
       },
       "R2API.Language/1.0.1": {
@@ -184,10 +231,14 @@
           "UnityEngine.Modules": "2019.4.26"
         },
         "compile": {
-          "lib/netstandard2.0/R2API.Language.dll": {}
+          "lib/netstandard2.0/R2API.Language.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/R2API.Language.dll": {}
+          "lib/netstandard2.0/R2API.Language.dll": {
+            "related": ".xml"
+          }
         }
       },
       "RiskOfRain2.GameLibs/1.3.9-r.0": {
@@ -247,10 +298,30 @@
           "UnityEngine.Modules": "2021.3.33"
         },
         "compile": {
-          "lib/netstandard2.1/RoR2BepInExPack.dll": {}
+          "lib/netstandard2.1/RoR2BepInExPack.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.1/RoR2BepInExPack.dll": {}
+          "lib/netstandard2.1/RoR2BepInExPack.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Rune580.Mods.RiskOfRain2.RiskOfOptions/2.8.3": {
+        "type": "package",
+        "dependencies": {
+          "BepInEx.Core": "5.4.21",
+          "BepInEx.PluginInfoProps": "1.1.0",
+          "MonoMod": "22.5.1.1",
+          "RiskOfRain2.GameLibs": "1.3.1.275-r.0",
+          "UnityEngine.Modules": "2021.3.33"
+        },
+        "compile": {
+          "lib/netstandard2.1/RiskOfOptions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/RiskOfOptions.dll": {}
         }
       },
       "System.Collections/4.3.0": {
@@ -261,7 +332,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Collections.NonGeneric/4.3.0": {
@@ -275,7 +348,9 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Collections.NonGeneric.dll": {}
+          "ref/netstandard1.3/System.Collections.NonGeneric.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.3/System.Collections.NonGeneric.dll": {}
@@ -293,7 +368,9 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/_._": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.3/System.Collections.Specialized.dll": {}
@@ -305,7 +382,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.0/System.ComponentModel.dll": {}
+          "ref/netstandard1.0/System.ComponentModel.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.3/System.ComponentModel.dll": {}
@@ -319,7 +398,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.0/System.ComponentModel.Primitives.dll": {}
+          "ref/netstandard1.0/System.ComponentModel.Primitives.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.0/System.ComponentModel.Primitives.dll": {}
@@ -345,7 +426,9 @@
           "System.Threading": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.5/System.ComponentModel.TypeConverter.dll": {}
+          "ref/netstandard1.5/System.ComponentModel.TypeConverter.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.5/System.ComponentModel.TypeConverter.dll": {}
@@ -359,7 +442,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Globalization/4.3.0": {
@@ -370,7 +455,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Globalization.dll": {}
+          "ref/netstandard1.3/System.Globalization.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Globalization.Extensions/4.3.0": {
@@ -384,7 +471,9 @@
           "System.Runtime.InteropServices": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/_._": {
+            "related": ".xml"
+          }
         },
         "runtimeTargets": {
           "runtimes/unix/lib/netstandard1.3/System.Globalization.Extensions.dll": {
@@ -407,7 +496,9 @@
           "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.5/System.IO.dll": {}
+          "ref/netstandard1.5/System.IO.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.IO.FileSystem.Primitives/4.3.0": {
@@ -416,7 +507,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
+          "ref/netstandard1.3/System.IO.FileSystem.Primitives.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
@@ -432,7 +525,9 @@
           "System.Runtime.Extensions": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.6/_._": {}
+          "ref/netstandard1.6/_._": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.6/System.Linq.dll": {}
@@ -448,7 +543,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.5/System.Reflection.dll": {}
+          "ref/netstandard1.5/System.Reflection.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Reflection.Emit/4.7.0": {
@@ -487,7 +584,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.0/_._": {}
+          "ref/netstandard1.0/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Reflection.Primitives/4.3.0": {
@@ -498,16 +597,22 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.0/System.Reflection.Primitives.dll": {}
+          "ref/netstandard1.0/System.Reflection.Primitives.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Reflection.TypeExtensions/4.7.0": {
         "type": "package",
         "compile": {
-          "ref/netstandard2.0/System.Reflection.TypeExtensions.dll": {}
+          "ref/netstandard2.0/System.Reflection.TypeExtensions.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/netstandard2.0/System.Reflection.TypeExtensions.dll": {}
+          "lib/netstandard2.0/System.Reflection.TypeExtensions.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Resources.ResourceManager/4.3.0": {
@@ -520,7 +625,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.0/_._": {}
+          "ref/netstandard1.0/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime/4.3.0": {
@@ -530,7 +637,9 @@
           "Microsoft.NETCore.Targets": "1.1.0"
         },
         "compile": {
-          "ref/netstandard1.5/System.Runtime.dll": {}
+          "ref/netstandard1.5/System.Runtime.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime.Extensions/4.3.0": {
@@ -541,7 +650,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.5/_._": {}
+          "ref/netstandard1.5/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime.Handles/4.3.0": {
@@ -552,7 +663,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Runtime.InteropServices/4.3.0": {
@@ -566,7 +679,9 @@
           "System.Runtime.Handles": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.5/_._": {}
+          "ref/netstandard1.5/_._": {
+            "related": ".xml"
+          }
         }
       },
       "System.Text.Encoding/4.3.0": {
@@ -577,7 +692,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Text.Encoding.dll": {}
+          "ref/netstandard1.3/System.Text.Encoding.dll": {
+            "related": ".xml"
+          }
         }
       },
       "System.Threading/4.3.0": {
@@ -587,7 +704,9 @@
           "System.Threading.Tasks": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/_._": {
+            "related": ".xml"
+          }
         },
         "runtime": {
           "lib/netstandard1.3/System.Threading.dll": {}
@@ -601,7 +720,9 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/System.Threading.Tasks.dll": {}
+          "ref/netstandard1.3/System.Threading.Tasks.dll": {
+            "related": ".xml"
+          }
         }
       },
       "UnityEngine.Modules/2021.3.33": {
@@ -725,6 +846,17 @@
         "tools/Install.ps1"
       ]
     },
+    "BepInEx.PluginInfoProps/1.1.0": {
+      "sha512": "RqM3aaGs8Hc2m0D+8aSt9mv09rCMYNIF35NB3D6KA2zSpcXJh/9ZVWrPlIUJfA8KYzodSWcCMUexEW24fjwR3w==",
+      "type": "package",
+      "path": "bepinex.plugininfoprops/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        "bepinex.plugininfoprops.1.1.0.nupkg.sha512",
+        "bepinex.plugininfoprops.nuspec",
+        "build/BepInEx.PluginInfoProps.props"
+      ]
+    },
     "HarmonyX/2.7.0": {
       "sha512": "lec/SkduQspMa3Pi/nM/NSvA84Za8HCCWA8ybdToKiTqnBZa+JC5g6rxoFQCg/1vNuYcvjy77edePZzIEsRmvw==",
       "type": "package",
@@ -813,6 +945,26 @@
         "mono.cecil.nuspec"
       ]
     },
+    "MonoMod/22.5.1.1": {
+      "sha512": "FKU1brIbpoQ655Akbefrk+mvDStmYzUwZVFBztUdJrjbtwVVaSsn+dFIvUG15SX9ij4jx9c649MKo/p4wbYrXQ==",
+      "type": "package",
+      "path": "monomod/22.5.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/MonoMod.exe",
+        "lib/net35/MonoMod.xml",
+        "lib/net452/MonoMod.exe",
+        "lib/net452/MonoMod.xml",
+        "lib/net5.0/MonoMod.dll",
+        "lib/net5.0/MonoMod.runtimeconfig.json",
+        "lib/net5.0/MonoMod.xml",
+        "lib/netstandard2.0/MonoMod.dll",
+        "lib/netstandard2.0/MonoMod.xml",
+        "monomod.22.5.1.1.nupkg.sha512",
+        "monomod.nuspec"
+      ]
+    },
     "MonoMod.RuntimeDetour/21.12.13.1": {
       "sha512": "65mB+bHjT6UCGCgO+/pYhpuGPf96rQ1Whwkut/x7cqVIW0DTndDFyWc/3bngzhnY/Y6IYtBMlXsU2ATq+CxpHg==",
       "type": "package",
@@ -832,10 +984,10 @@
         "monomod.runtimedetour.nuspec"
       ]
     },
-    "MonoMod.Utils/21.12.13.1": {
-      "sha512": "/H+0RMWqx/D1/fSuY5jhY6GFvqhdYdlnI7J3IfL8P6y4nJkoZDxqts6+RxWWOz4pbnJdWnxSjS8XG+Lq6rUi7w==",
+    "MonoMod.Utils/22.5.1.1": {
+      "sha512": "vBObO1atXxhi2C4AuC53y87Bqeogi9xIrD1Ym3YWr5uxc8Nrm8SrsFeD1i3x04R999+XQ3FdeHrbXScyWYEHqQ==",
       "type": "package",
-      "path": "monomod.utils/21.12.13.1",
+      "path": "monomod.utils/22.5.1.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -847,20 +999,20 @@
         "lib/net5.0/MonoMod.Utils.xml",
         "lib/netstandard2.0/MonoMod.Utils.dll",
         "lib/netstandard2.0/MonoMod.Utils.xml",
-        "monomod.utils.21.12.13.1.nupkg.sha512",
+        "monomod.utils.22.5.1.1.nupkg.sha512",
         "monomod.utils.nuspec"
       ]
     },
-    "R2API.ContentManagement/1.0.9": {
-      "sha512": "LyAMq3nL9aS0EhsS71i78E5L967BhBJihjK/PKVTzITWkGEx65SGoonp2bimk9uMRGAnYPZpw19E8VGOHdsZOQ==",
+    "R2API.ContentManagement/1.0.10": {
+      "sha512": "9016lfc4/vy4jOBe6emTH6fH9onLQFSmmJF0NKlGekM6OSbJ16A2xbeRw0TJMixEgpEXgVn+ind/AbHdRLKPpQ==",
       "type": "package",
-      "path": "r2api.contentmanagement/1.0.9",
+      "path": "r2api.contentmanagement/1.0.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.1/R2API.ContentManagement.dll",
         "lib/netstandard2.1/R2API.ContentManagement.xml",
-        "r2api.contentmanagement.1.0.9.nupkg.sha512",
+        "r2api.contentmanagement.1.0.10.nupkg.sha512",
         "r2api.contentmanagement.nuspec"
       ]
     },
@@ -875,19 +1027,6 @@
         "lib/netstandard2.1/R2API.Core.xml",
         "r2api.core.5.1.5.nupkg.sha512",
         "r2api.core.nuspec"
-      ]
-    },
-    "R2API.Items/1.0.7": {
-      "sha512": "hg21Gk87+JbDQ84+Mmmt0ZlK6gJsPzTwl9iYuyDHSxkl6TED1YhDbU5x0FIS4WkM+HjRRUqliN6JRDIH3XJdXg==",
-      "type": "package",
-      "path": "r2api.items/1.0.7",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/netstandard2.1/R2API.Items.dll",
-        "lib/netstandard2.1/R2API.Items.xml",
-        "r2api.items.1.0.7.nupkg.sha512",
-        "r2api.items.nuspec"
       ]
     },
     "R2API.Language/1.0.1": {
@@ -945,6 +1084,21 @@
         "lib/netstandard2.1/RoR2BepInExPack.xml",
         "ror2bepinexpack.1.30.0.nupkg.sha512",
         "ror2bepinexpack.nuspec"
+      ]
+    },
+    "Rune580.Mods.RiskOfRain2.RiskOfOptions/2.8.3": {
+      "sha512": "Q5mjRM9r/BZJ/9ICgi/RqqANJAZBo6ryPQz7iYb+lyBzMA2GxmGuv2qGa3dDKuH4yD0EsLUzx+uzCWajatv8rg==",
+      "type": "package",
+      "path": "rune580.mods.riskofrain2.riskofoptions/2.8.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "lib/netstandard2.1/RiskOfOptions.dll",
+        "roo-icon-static.png",
+        "rune580.mods.riskofrain2.riskofoptions.2.8.3.nupkg.sha512",
+        "rune580.mods.riskofrain2.riskofoptions.nuspec"
       ]
     },
     "System.Collections/4.3.0": {
@@ -2833,9 +2987,10 @@
       "BepInEx.Analyzers >= 1.0.*",
       "BepInEx.Core >= 5.4.21",
       "MMHOOK.RoR2 >= 2025.6.3",
-      "R2API.Items >= 1.0.*",
+      "R2API.ContentManagement >= 1.0.10",
       "R2API.Language >= 1.0.*",
       "RiskOfRain2.GameLibs >= 1.3.9-r.0",
+      "Rune580.Mods.RiskOfRain2.RiskOfOptions >= 2.8.3",
       "UnityEngine.Modules >= 2021.3.33"
     ]
   },
@@ -2878,7 +3033,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "netstandard2.1": {
@@ -2901,9 +3062,9 @@
               "NU1701"
             ]
           },
-          "R2API.Items": {
+          "R2API.ContentManagement": {
             "target": "Package",
-            "version": "[1.0.*, )"
+            "version": "[1.0.10, )"
           },
           "R2API.Language": {
             "target": "Package",
@@ -2912,6 +3073,10 @@
           "RiskOfRain2.GameLibs": {
             "target": "Package",
             "version": "[1.3.9-r.0, )"
+          },
+          "Rune580.Mods.RiskOfRain2.RiskOfOptions": {
+            "target": "Package",
+            "version": "[2.8.3, )"
           },
           "UnityEngine.Modules": {
             "include": "Compile",
@@ -2925,7 +3090,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -2934,7 +3100,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.136\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308\\RuntimeIdentifierGraph.json"
       }
     }
   }

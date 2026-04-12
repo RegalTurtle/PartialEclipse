@@ -1,3 +1,8 @@
+## 1.4.0
+
+- Added Eclipse 2
+- I'm aware that you can still buy things outside of the radius, might fix that if I can figure out how
+
 ## 1.3.2
 
 - Added compatibility support for [EclipseArtifacts](https://thunderstore.io/package/Judgy/EclipseArtifacts/)

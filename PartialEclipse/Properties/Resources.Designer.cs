@@ -83,6 +83,26 @@ namespace PartialEclipse.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] E2_deselected {
+            get {
+                object obj = ResourceManager.GetObject("E2_deselected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] E2_selected {
+            get {
+                object obj = ResourceManager.GetObject("E2_selected", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] E3_deselected {
             get {
                 object obj = ResourceManager.GetObject("E3_deselected", resourceCulture);

@@ -1,10 +1,12 @@
-# Partial Eclipse 8
+# Partial Eclipse
 
-Creates four artifacts for Eclipse 1, 3, 5, and 8 that apply the eclipse effects to those who vote for them, similar to PartialMetamorphosis.
+Creates five artifacts for Eclipse 1, 2, 3, 5, and 8 that apply the Eclipse effects to those who vote for them, inspired by [PartialMetamorphosis](https://thunderstore.io/package/KingEnderBrine/PartialMetamorphosis/).
 
 Works with [EclipseArtifacts](https://thunderstore.io/package/Judgy/EclipseArtifacts/)
 
 - Eclipse 1: Start with 50% health
+
+- Eclipse 2: Teleporter radius is halved
 
 - Eclipse 3: Fall damage doubled and lethal
 
@@ -14,6 +16,12 @@ Works with [EclipseArtifacts](https://thunderstore.io/package/Judgy/EclipseArtif
 
 Message me on discord if this stops working again, or if you have other questions @regalturtle
 
-# WIP
+# Known Issues
 
-- Will be working on ways to implement E2, 4, 6, & 7 one sided
+- With Eclipse 2 selected you can still buy chests outside of the radius
+
+# TODO
+
+- Will be working on ways to implement E4, E6, & E7 one sided
+
+- Confirm if this is compatible with [CursedEcho](https://thunderstore.io/package/Prototype/CursedEcho/)

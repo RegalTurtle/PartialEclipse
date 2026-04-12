@@ -124,6 +124,12 @@
   <data name="E1_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\E1_selected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="E2_deselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E2_deselected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="E2_selected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\E2_selected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="E3_deselected" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\E3_deselected.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
