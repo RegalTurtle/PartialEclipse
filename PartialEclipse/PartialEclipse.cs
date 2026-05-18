@@ -13,6 +13,7 @@ using BepInEx.Configuration;
 using RiskOfOptions;
 using RiskOfOptions.Options;
 using System.IO;
+using UnityEngine.Networking;
 
 namespace PartialEclipse
 {
@@ -62,6 +63,7 @@ namespace PartialEclipse
         // For Eclipse 2
         private static readonly MethodInfo isBodyInChargingRadius = typeof(HoldoutZoneController).GetMethod(nameof(HoldoutZoneController.IsBodyInChargingRadius), BindingFlags.Static | BindingFlags.NonPublic);
         private static readonly MethodInfo doUpdate = typeof(HoldoutZoneController).GetMethod(nameof(HoldoutZoneController.DoUpdate), BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo onStartServer = typeof(NetworkUser).GetMethod(nameof(NetworkUser.OnStartServer), BindingFlags.Instance | BindingFlags.Public);
         // For Eclipse 3
         private static readonly MethodInfo onCharacterHitGroundServer = typeof(GlobalEventManager).GetMethod(nameof(GlobalEventManager.OnCharacterHitGroundServer), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         // For Eclipse 5
@@ -166,10 +168,14 @@ namespace PartialEclipse
             {
                 //if (votedForEclipse2.Any(el => el.master == charBody.master))
                 //if (HalfTPSize.Value)
-                if (votedForEclipse2.Any(el => el.hasAuthority))
+                NetworkUser localUser = NetworkUser.readOnlyLocalPlayersList[0];
+                //if (votedForEclipse2.Any(el => el.localPlayerAuthority))
+                if (votedForEclipse2.Any(el => el == localUser))
                 {
+                    //Log.Info("found a player in list");
                     return 1f;
                 }
+                //Log.Info("didn't find player in list");
                 return 2f;
             });
         }
@@ -429,6 +435,26 @@ namespace PartialEclipse
             new PartialEclipse3Artifact();
             new PartialEclipse5Artifact();
             new PartialEclipse8Artifact();
+
+            HookEndpointManager.Add(onStartServer, (orig, self) =>
+            {
+                orig(self);
+
+                if (!self.GetComponent<EclipseVoteSync>())
+                {
+                    self.gameObject.AddComponent<EclipseVoteSync>();
+                }
+            });
+
+            On.RoR2.NetworkUser.OnStartServer += (orig, self) =>
+            {
+                orig(self);
+
+                if (!self.GetComponent<EclipseVoteSync>())
+                {
+                    self.gameObject.AddComponent<EclipseVoteSync>();
+                }
+            };
         }
 
         public void Destroy()
@@ -464,5 +490,11 @@ namespace PartialEclipse
             // For Eclipse 8
             HookEndpointManager.Modify(damage, TakeDamageProcess);
         }
+    }
+
+    public class EclipseVoteSync : NetworkBehaviour
+    {
+        [SyncVar]
+        public bool votedForEclipse2;
     }
 }

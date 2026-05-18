@@ -10,3 +10,16 @@ C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\bin\Debug\ne
 C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.GenerateResource.cache
 C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.Properties.Resources.resources
 C:\Users\thysv\Desktop\PartialEclipse\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.AssemblyReference.cache
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\bin\Debug\netstandard2.1\PartialEclipse.deps.json
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\bin\Debug\netstandard2.1\PartialEclipse.dll
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\bin\Debug\netstandard2.1\PartialEclipse.pdb
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.AssemblyReference.cache
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.Properties.Resources.resources
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.GenerateResource.cache
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.AssemblyInfoInputs.cache
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.AssemblyInfo.cs
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.csproj.CoreCompileInputs.cache
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.sourcelink.json
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.dll
+C:\Users\thysv\source\repos\PartialEclipse\PartialEclipse\obj\Debug\netstandard2.1\PartialEclipse.pdb
