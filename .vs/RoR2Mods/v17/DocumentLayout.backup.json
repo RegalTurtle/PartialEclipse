@@ -1,22 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\",
+  "WorkspaceRootPath": "C:\\Users\\thysv\\source\\PartialEclipse\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\repos\\partialeclipse\\partialeclipse\\partialeclipse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\partialeclipse\\partialeclipse\\partialeclipse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|solutionrelative:partialeclipse\\partialeclipse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\repos\\partialeclipse\\partialeclipse\\log.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|solutionrelative:partialeclipse\\log.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\repos\\partialeclipse\\partialeclipse\\partialeclipse2artifact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|solutionrelative:partialeclipse\\partialeclipse2artifact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\repos\\partialeclipse\\partialeclipse\\partialeclipse.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\partialeclipse\\partialeclipse\\partialeclipse.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|solutionrelative:partialeclipse\\partialeclipse.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|c:\\users\\thysv\\source\\partialeclipse\\partialeclipse\\partialeclipse1artifact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F8A40CC-6D15-486D-B689-0A7A472DB89E}|PartialEclipse\\PartialEclipse.csproj|solutionrelative:partialeclipse\\partialeclipse1artifact.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,39 +38,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Log.cs",
-              "DocumentMoniker": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\Log.cs",
-              "RelativeDocumentMoniker": "PartialEclipse\\Log.cs",
-              "ToolTip": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\Log.cs",
-              "RelativeToolTip": "PartialEclipse\\Log.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-13T06:33:05.062Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PartialEclipse2Artifact.cs",
-              "DocumentMoniker": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse2Artifact.cs",
-              "RelativeDocumentMoniker": "PartialEclipse\\PartialEclipse2Artifact.cs",
-              "ToolTip": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse2Artifact.cs",
-              "RelativeToolTip": "PartialEclipse\\PartialEclipse2Artifact.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "PartialEclipse1Artifact.cs",
+              "DocumentMoniker": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse1Artifact.cs",
+              "RelativeDocumentMoniker": "PartialEclipse\\PartialEclipse1Artifact.cs",
+              "ToolTip": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse1Artifact.cs",
+              "RelativeToolTip": "PartialEclipse\\PartialEclipse1Artifact.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-12T22:53:12.419Z",
+              "WhenOpened": "2026-10-16T05:28:17.65Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PartialEclipse",
-              "DocumentMoniker": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
+              "DocumentIndex": 1,
+              "Title": "PartialEclipse.csproj",
+              "DocumentMoniker": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
               "RelativeDocumentMoniker": "PartialEclipse\\PartialEclipse.csproj",
-              "ToolTip": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
+              "ToolTip": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
               "RelativeToolTip": "PartialEclipse\\PartialEclipse.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADMAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAAAQAAAAAAAAAAADwvyEAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-04-12T22:52:49.449Z",
               "EditorCaption": ""
@@ -83,11 +66,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "PartialEclipse.cs",
-              "DocumentMoniker": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.cs",
+              "DocumentMoniker": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.cs",
               "RelativeDocumentMoniker": "PartialEclipse\\PartialEclipse.cs",
-              "ToolTip": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.cs",
+              "ToolTip": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.cs",
               "RelativeToolTip": "PartialEclipse\\PartialEclipse.cs",
-              "ViewState": "AgIAAIcAAAAAAAAAAAAAwKoAAAA9AAAAAAAAAA==",
+              "ViewState": "AgIAAFACAAAAAAAAAAAAAGoCAABlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-15T23:02:14.186Z",
               "EditorCaption": ""

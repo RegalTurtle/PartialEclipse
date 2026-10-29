@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oQyOXJ95hUQ=",
+  "dgSpecHash": "GoNDsDWV/Kc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
+  "projectFilePath": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\thysv\\.nuget\\packages\\bepinex.analyzers\\1.0.8\\bepinex.analyzers.1.0.8.nupkg.sha512",
     "C:\\Users\\thysv\\.nuget\\packages\\bepinex.baselib\\5.4.20\\bepinex.baselib.5.4.20.nupkg.sha512",
@@ -19,7 +19,8 @@
     "C:\\Users\\thysv\\.nuget\\packages\\r2api.contentmanagement\\1.0.10\\r2api.contentmanagement.1.0.10.nupkg.sha512",
     "C:\\Users\\thysv\\.nuget\\packages\\r2api.core\\5.2.0\\r2api.core.5.2.0.nupkg.sha512",
     "C:\\Users\\thysv\\.nuget\\packages\\r2api.language\\1.1.0\\r2api.language.1.1.0.nupkg.sha512",
-    "C:\\Users\\thysv\\.nuget\\packages\\riskofrain2.gamelibs\\1.4.1-r.0\\riskofrain2.gamelibs.1.4.1-r.0.nupkg.sha512",
+    "C:\\Users\\thysv\\.nuget\\packages\\r2api.networking\\1.0.4\\r2api.networking.1.0.4.nupkg.sha512",
+    "C:\\Users\\thysv\\.nuget\\packages\\riskofrain2.gamelibs\\1.5.0-r.1\\riskofrain2.gamelibs.1.5.0-r.1.nupkg.sha512",
     "C:\\Users\\thysv\\.nuget\\packages\\ror2bepinexpack\\1.36.0\\ror2bepinexpack.1.36.0.nupkg.sha512",
     "C:\\Users\\thysv\\.nuget\\packages\\rune580.mods.riskofrain2.riskofoptions\\2.8.5\\rune580.mods.riskofrain2.riskofoptions.2.8.5.nupkg.sha512",
     "C:\\Users\\thysv\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",

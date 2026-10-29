@@ -1,3 +1,8 @@
+## 1.4.1
+
+- Eclipse 2 now properly networked, you can see the radius as player 2 now
+- Also HC update!
+
 ## 1.4.0
 
 - Added Eclipse 2

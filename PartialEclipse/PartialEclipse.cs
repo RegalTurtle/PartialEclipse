@@ -9,11 +9,19 @@ using Mono.Cecil.Cil;
 using MonoMod.RuntimeDetour.HookGen;
 using System;
 using System.Linq;
-using BepInEx.Configuration;
-using RiskOfOptions;
-using RiskOfOptions.Options;
-using System.IO;
+//using BepInEx.Configuration;
+//using RiskOfOptions;
+//using RiskOfOptions.Options;
+//using System.IO;
+using R2API.Networking;
 using UnityEngine.Networking;
+using R2API.Networking.Interfaces;
+using RoR2.CharacterAI;
+
+using System.Security;
+using System.Security.Permissions;
+
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace PartialEclipse
 {
@@ -26,6 +34,9 @@ namespace PartialEclipse
 
     // This attribute is required, and lists metadata for your plugin.
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+
+    // This is for networking
+    [BepInDependency(NetworkingAPI.PluginGUID)]
 
     // This is the main declaration of our plugin class.
     // BepInEx searches for all classes inheriting from BaseUnityPlugin to initialize on startup.
@@ -50,13 +61,16 @@ namespace PartialEclipse
         private static readonly HashSet<NetworkUser> votedForEclipse1 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse2 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse3 = new();
+        private static readonly HashSet<NetworkUser> votedForEclipse4 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse5 = new();
+        private static readonly HashSet<NetworkUser> votedForEclipse6 = new();
+        private static readonly HashSet<NetworkUser> votedForEclipse7 = new();
         private static readonly HashSet<NetworkUser> votedForEclipse8 = new();
 
         public static bool EclipseArtifactsInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("Judgy.EclipseArtifacts");
         public static bool RiskOfOptionsInstalled => BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.rune580.riskofoptions");
 
-        // This gets anything to work at all
+        // This gets anything to work at all, used for the check on who voted for what
         private static readonly MethodInfo startRun = typeof(PreGameController).GetMethod(nameof(PreGameController.StartRun), BindingFlags.NonPublic | BindingFlags.Instance);
         // For Eclipse 1
         private static readonly MethodInfo onBodyStart = typeof(CharacterMaster).GetMethod(nameof(CharacterMaster.OnBodyStart), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -66,8 +80,13 @@ namespace PartialEclipse
         private static readonly MethodInfo onStartServer = typeof(NetworkUser).GetMethod(nameof(NetworkUser.OnStartServer), BindingFlags.Instance | BindingFlags.Public);
         // For Eclipse 3
         private static readonly MethodInfo onCharacterHitGroundServer = typeof(GlobalEventManager).GetMethod(nameof(GlobalEventManager.OnCharacterHitGroundServer), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        // For Eclipse 4
+        private static readonly MethodInfo recalculateStats = typeof(CharacterBody).GetMethod(nameof(CharacterBody.RecalculateStats), BindingFlags.Public | BindingFlags.Instance);
         // For Eclipse 5
         private static readonly MethodInfo heal = typeof(HealthComponent).GetMethod(nameof(HealthComponent.Heal), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        // For Eclipse 6
+        private static int goldFromEnemy = 0;
+        // For Eclipse 7: not needed as it's the same function as E4
         // For Eclipse 8
         private static readonly MethodInfo damage = typeof(HealthComponent).GetMethod(nameof(HealthComponent.TakeDamageProcess), BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -75,201 +94,242 @@ namespace PartialEclipse
         //internal static ConfigEntry<bool> HalfTPSize { get; set; }
 
         // Eclipse 1 modification
-        private static void OnBodyStart(ILContext il)
+        private static void OnBodyStartEclipse1(ILContext il)
         {
-            var c = new ILCursor(il);
+            var checkCursor = new ILCursor(il);
+            var behaviorCursor = new ILCursor(il);
 
-            Instruction eclipseBehavior;
-
-            // Behavior here only for EclipseArtifacts installed
-            if (EclipseArtifactsInstalled)
+            if (!checkCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCall<Run>("get_instance"),
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse1)
+            ))
             {
-                if (!c.TryGotoNext(
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
-                {
-                    Log.Error("Failed to find Eclipse 1 check, EclipseArtifacts loaded");
-                    return;
-                }
-
-                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
-                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
-            }
-            // Typical behavior
-            else
-            {
-                if (!c.TryGotoNext( // default behavior
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse1),
-                    x => x.MatchBlt(out _)))
-                {
-                    Log.Error("Failed to find Eclipse 1 check");
-                    return;
-                }
-
-                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+                Log.Error("Failed to find Eclipse 1 check (OnBodyStart)");
+                return;
             }
 
-            c.Index--;
+            behaviorCursor.Index = checkCursor.Index;
+            if (!behaviorCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdloc(0),
+                x => x.MatchLdloc(0),
+                x => x.MatchCallvirt<HealthComponent>("get_fullHealth"),
+                x => x.MatchLdcR4(0.5f),
+                x => x.MatchMul(),
+                x => x.MatchCall<HealthComponent>("set_Networkhealth")
+            ))
+            {
+                Log.Error("Failed to find Eclipse 1 behavior (OnBodyStart)");
+                return;
+            }
 
-            c.Emit(OpCodes.Ldarg_0); // load 'this' for the CharacterMaster
-            c.EmitDelegate<Func<CharacterMaster, bool>>(selfMaster =>
+            // do the check
+            checkCursor.Emit(OpCodes.Ldarg_0); // load 'this' for the CharacterMaster
+            checkCursor.EmitDelegate<Func<CharacterMaster, bool>>(selfMaster =>
             {
                 return votedForEclipse1.Any(el => el.master == selfMaster);
             });
 
-            c.Emit(OpCodes.Brtrue_S, eclipseBehavior); // if false, branch to the elseLabel health = fullHealth line
+            // Branch to Eclipse 1 behavior
+            // If true, jump to the half-health assignment, else continue vanilla behavior
+            checkCursor.Emit(OpCodes.Brtrue, behaviorCursor.Next);
         }
 
         // Eclipse 2 modification
-        private static void IsBodyInChargingRadiusEdit(ILContext il)
+        private static void IsBodyInChargingRadiusEclipse2(ILContext il)
         {
-            var c = new ILCursor(il);
+            var loadRadiusCursor = new ILCursor(il);
 
-            if (!c.TryGotoNext(
-                x => x.MatchLdarg(2)))
+            // Go to where the chargingRadiusSqr is being locaded onto the stack
+            if (!loadRadiusCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdarg(3)
+            ))
             {
-                Log.Error("Failed to find loading of arg 2 (for Eclipse 2)");
+                Log.Error("Failed to find loading of chargingRadiusSqr (Eclipse 2, IsBodyInChargingRadius)");
                 return;
             }
 
-            c.Index++;
-
-            c.Emit(OpCodes.Ldarg_3);
-
-            c.EmitDelegate<Func<float, CharacterBody, float>>((chargingRadiusSq, charBody) =>
-            {
-                if (votedForEclipse2.Any(el => el.master == charBody.master))
+            // Load the CharacterBody
+            loadRadiusCursor.Emit(OpCodes.Ldarg_3);
+            // Edit the chargingRadiusSqr if need be
+            loadRadiusCursor.EmitDelegate<Func<float, CharacterBody, float>>(
+                (chargingRadiusSqr, charBody) =>
                 {
-                    return chargingRadiusSq / 4f;
+                    if (votedForEclipse2.Any(el => el.master == charBody.master))
+                    {
+                        return chargingRadiusSqr / 4f;
+                    }
+                    return chargingRadiusSqr;
                 }
-                return chargingRadiusSq;
-            });
+            );
         }
 
-        private static void DoUpdateEdit(ILContext il)
+        private static void DoUpdateEclipse2(ILContext il)
         {
-            var c = new ILCursor(il);
+            var radiusCursor = new ILCursor(il);
 
-            // Run.instance.selectedDifficulty
-            if (!c.TryGotoNext(
+            // Go to right after the currentRadius is multiplied by 2
+            if (!radiusCursor.TryGotoNext(
+                MoveType.After,
                 x => x.MatchLdcR4(2f),
                 x => x.MatchLdarg(0),
                 x => x.MatchCall<HoldoutZoneController>("get_currentRadius"),
                 x => x.MatchMul()
             ))
             {
-                Log.Error("Eclipse 2: Failed to find radius hook");
+                Log.Error("Failed to find loadiong of current radius (Eclipse 2, DoUpdate)");
                 return;
             }
 
-            c.Index++;
-
-            c.EmitDelegate<Func<float, float>>((tpMult) =>
-            {
-                //if (votedForEclipse2.Any(el => el.master == charBody.master))
-                //if (HalfTPSize.Value)
-                NetworkUser localUser = NetworkUser.readOnlyLocalPlayersList[0];
-                //if (votedForEclipse2.Any(el => el.localPlayerAuthority))
-                if (votedForEclipse2.Any(el => el == localUser))
+            // If the user voted for Eclipse 2, half the radius
+            radiusCursor.EmitDelegate<Func<float, float>>(
+                (visualRadius) =>
                 {
-                    //Log.Info("found a player in list");
-                    return 1f;
+                    if (NetworkUser.readOnlyLocalPlayersList.Count == 0)
+                    {
+                        return visualRadius;
+                    }
+
+                    NetworkUser localUser = NetworkUser.readOnlyLocalPlayersList[0];
+
+                    if (votedForEclipse2.Any(el => el == localUser))
+                    {
+                        return visualRadius / 2f;
+                    }
+                    return visualRadius;
                 }
-                //Log.Info("didn't find player in list");
-                return 2f;
-            });
+            );
         }
 
         // Eclipse 3 modification
-        private static void OnCharacterHitGroundServerEdit(ILContext il)
+        private static void OnCharacterHitGroundServerEclipse3(ILContext il)
         {
-            var c = new ILCursor(il);
+            var checkCursor = new ILCursor(il);
+            var behaviorCursor = new ILCursor(il);
 
-            Instruction eclipseBehavior;
-
-            // Behavior here only for EclipseArtifacts installed
-            if (EclipseArtifactsInstalled)
+            if (!checkCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCall<Run>("get_instance"),
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse3)
+            ))
             {
-                if (!c.TryGotoNext(
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
-                {
-                    Log.Error("Failed to find Eclipse 3 check, EclipseArtifacts loaded");
-                    return;
-                }
-
-                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
-                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
-            }
-            // Typical behavior
-            else
-            {
-                if (!c.TryGotoNext( // default behavior
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse3),
-                    x => x.MatchBlt(out _)))
-                {
-                    Log.Error("Failed to find Eclipse 3 check");
-                    return;
-                }
-
-                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+                Log.Error("Failed to find Eclipse 3 check (OnCharacterHitGroundServer)");
+                return;
             }
 
-            c.Index--;
+            if (!behaviorCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdloc(7),
+                x => x.MatchDup(),
+                x => x.MatchLdfld<DamageInfo>(nameof(DamageInfo.damage)),
+                x => x.MatchLdcR4(2f),
+                x => x.MatchMul(),
+                x => x.MatchStfld<DamageInfo>(nameof(DamageInfo.damage))
+            ))
+            {
+                Log.Error("Failed to find Eclipse 3 behavior (OnCharacterHitGroundServer)");
+                return;
+            }
 
-            c.Emit(OpCodes.Ldarg_1);
-            c.EmitDelegate<Func<CharacterBody, bool>>(selfCharacterBody =>
+            // do the check
+            checkCursor.Emit(OpCodes.Ldarg_1);
+            checkCursor.EmitDelegate<Func<CharacterBody, bool>>(selfCharacterBody =>
             {
                 return votedForEclipse3.Any(el => el.master == selfCharacterBody.master);
             });
 
-            c.Emit(OpCodes.Brtrue_S, eclipseBehavior);
+            // Branch to Eclipse 3 behavior
+            checkCursor.Emit(OpCodes.Brtrue, behaviorCursor.Next);
+        }
+
+        // Eclipse 4 modification
+        private static void RecalculateStatsEclipse4(ILContext il)
+        {
+            var checkCursor = new ILCursor(il);
+            var behaviorCursor = new ILCursor(il);
+
+            if (!checkCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCall<Run>("get_instance"),
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse4)
+            ))
+            {
+                Log.Error("Failed to find Eclipse 4 check (RecalculateStats)");
+                return;
+            }
+
+            behaviorCursor.Index = checkCursor.Index;
+            if (!behaviorCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdloc(135),
+                x => x.MatchLdcR4(0.4f),
+                x => x.MatchAdd(),
+                x => x.MatchStloc(135)
+            ))
+            {
+                Log.Error("Failed to find Eclipse 4 behavior (RecalculateStats)");
+                return;
+            }
+
+            // Emit checks
+            checkCursor.Emit(OpCodes.Ldarg_0);
+            checkCursor.EmitDelegate<Func<CharacterBody, bool>>(thisCharBody =>
+            {
+                BaseAI thisAi = thisCharBody.master?.GetComponent<BaseAI>();
+                CharacterBody thisTarget = thisAi?.currentEnemy?.characterBody;
+
+                return thisTarget != null &&
+                    votedForEclipse4.Any(el => el && el.master == thisTarget.master);
+            });
+
+            // Branch to Eclipse behavior
+            checkCursor.Emit(OpCodes.Brtrue, behaviorCursor.Next);
         }
 
         // Eclipse 5 modification
-        private static void Heal(ILContext il)
+        private static void HealEclipse5(ILContext il)
         {
-            var c = new ILCursor(il);
+            var checkCursor = new ILCursor(il);
+            var behaviorCursor = new ILCursor(il);
 
-            Instruction eclipseBehavior;
-
-            // Behavior here only for EclipseArtifacts installed
-            if (EclipseArtifactsInstalled)
+            if (!checkCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCall<Run>("get_instance"),
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse1)
+            ))
             {
-                if (!c.TryGotoNext(
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
-                {
-                    Log.Error("Failed to find Eclipse 5 check, EclipseArtifacts loaded");
-                    return;
-                }
-
-                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
-                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
-            }
-            // Typical behavior
-            else
-            {
-                if (!c.TryGotoNext( // default behavior
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse5),
-                    x => x.MatchBlt(out _)))
-                {
-                    Log.Error("Failed to find Eclipse 5 check");
-                    return;
-                }
-
-                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+                Log.Error("Failed to find Eclipse 1 check (OnBodyStart)");
+                return;
             }
 
-            c.Index--;
+            behaviorCursor.Index = checkCursor.Index;
+            if (!behaviorCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdarg(1),
+                x => x.MatchLdcR4(2),
+                x => x.MatchDiv(),
+                x => x.MatchStarg(1)
+            ))
+            {
+                Log.Error("Failed to find Eclipse 1 behavior (OnBodyStart)");
+                return;
+            }
 
-            c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent =>
+            // Emit check
+            checkCursor.Emit(OpCodes.Ldarg_0);
+            checkCursor.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent =>
             {
                 return votedForEclipse5.Any(el => el.master == selfHealthComponent.body.master);
             });
 
-            c.Emit(OpCodes.Brtrue_S, eclipseBehavior);
+            // Branch to E5 behavior
+            checkCursor.Emit(OpCodes.Brtrue, behaviorCursor.Next);
         }
 
         public static float NewHalfHealing(HealthComponent that, float healAmount)
@@ -281,65 +341,150 @@ namespace PartialEclipse
             return healAmount;
         }
 
-        // Eclipse 8 modification
-        private static void TakeDamageProcess(ILContext il)
+        // Eclipse 6 modification
+        private static void OnKilledServerEclipse6(ILContext il)
         {
             var c = new ILCursor(il);
 
-            Instruction eclipseBehavior;
-
-            // Behavior here only for EclipseArtifacts installed
-            if (EclipseArtifactsInstalled)
+            if (!c.TryGotoNext(
+                x => x.MatchCallvirt<TeamManager>("GiveTeamMoney") // need to edit this call to store info on the fact that this gold is from enemies
+                ))
             {
-                if (!c.TryGotoNext(
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty")))
-                {
-                    Log.Error("Failed to find Eclipse 8 check, EclipseArtifacts loaded");
-                    return;
-                }
-
-                // This is 3 more .Nexts to skip over the behavior added by EclipseArtifacts
-                eclipseBehavior = c.Next.Next.Next.Next.Next.Next.Next;
-            }
-            // Typical behavior
-            else
-            {
-                if (!c.TryGotoNext( // default behavior
-                    x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
-                    x => x.MatchLdcI4((int)DifficultyIndex.Eclipse8),
-                    x => x.MatchBlt(out _)))
-                {
-                    Log.Error("Failed to find Eclipse 8 check");
-                    return;
-                }
-
-                eclipseBehavior = c.Next.Next.Next.Next; // the operand after the branch to vanilla behavior
+                Log.Error("Failed to find GiveTeamMoney call (OnKilledServer, Eclipse 6)");
+                return;
             }
 
-            c.Index--;
-
-            c.Emit(OpCodes.Ldarg_0);
-            c.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent =>
-            {
-                return votedForEclipse8.Any(el => el.master == selfHealthComponent.body.master);
-            });
-
-            c.Emit(OpCodes.Brtrue_S, eclipseBehavior);
+            c.Remove();
+            c.EmitDelegate<Action<TeamManager, TeamIndex, uint, bool>>(
+                (manager, teamIndex, money, bypassStatManager) =>
+                {
+                    goldFromEnemy++;
+                    try
+                    {
+                        manager.GiveTeamMoney(teamIndex, money, bypassStatManager);
+                    }
+                    finally
+                    {
+                        goldFromEnemy--;
+                    }
+                }
+            );
         }
 
-        public static void NewTakeCurse(CharacterMaster master, float damageAmount, HealthComponent that)
+        private static void GiveTeamMoneyEclipse6(ILContext il)
         {
-            // If any of the people that voted for eclipse match the master of the object taking damage, apply curse
-            if (votedForEclipse8.Any(el => el.master == master))
+            var c = new ILCursor(il);
+
+            if (!c.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCallvirt<CharacterMaster>("GiveMoney")
+            ))
             {
-                float percentOfHealth = damageAmount / that.fullCombinedHealth * 100f;
-                float curseProportion = 0.4f;
-                int numStacks = Mathf.FloorToInt(percentOfHealth * curseProportion);
-                for (int k = 0; k < numStacks; k++)
-                {
-                    that.body.AddBuff(RoR2Content.Buffs.PermanentCurse);
-                }
+                Log.Error("Failed to find GiveMoney call (Eclipse 6)");
+                return;
             }
+
+            c.Remove();
+            c.EmitDelegate<Action<CharacterMaster, uint, bool>>(
+                (master, money, bypassStatManager) =>
+                {
+                    if (goldFromEnemy > 0 && votedForEclipse6.Any(el => el.master == master))
+                    {
+                        money = (uint)(money * 0.8f);
+                    }
+
+                    master.GiveMoney(money, bypassStatManager);
+                }
+            );
+        }
+
+        // Eclipse 7 modification
+        private static void RecalculateStatsEclipse7(ILContext il)
+        {
+            var checkCursor = new ILCursor(il);
+            var behaviorCursor = new ILCursor(il);
+
+            if (!checkCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCall<Run>("get_instance"),
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse7)
+            ))
+            {
+                Log.Error("Failed to find Eclipse 7 check (RecalculateStats)");
+                return;
+            }
+
+            behaviorCursor.Index = checkCursor.Index;
+            if (!behaviorCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdloc(161),
+                x => x.MatchLdcR4(0.5f),
+                x => x.MatchMul(),
+                x => x.MatchStloc(161)
+            ))
+            {
+                Log.Error("Failed to find Eclipse 7 behavior (RecalculateStats)");
+                return;
+            }
+
+            // Emit check
+            checkCursor.Emit(OpCodes.Ldarg_0);
+            checkCursor.EmitDelegate<Func<CharacterBody, bool>>(thisCharBody =>
+            {
+                BaseAI thisAi = thisCharBody.master?.GetComponent<BaseAI>();
+                CharacterBody thisTarget = thisAi?.currentEnemy?.characterBody;
+
+                return thisTarget != null &&
+                    votedForEclipse7.Any(el => el && el.master && el.master.GetBody() == thisTarget);
+            });
+
+            // Emit jump
+            checkCursor.Emit(OpCodes.Brtrue, behaviorCursor.Next);
+        }
+
+        // Eclipse 8 modification
+        private static void TakeDamageProcessEclipse8(ILContext il)
+        {
+            var checkCursor = new ILCursor(il);
+            var behaviorCursor = new ILCursor(il);
+
+            if (!checkCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchCall<Run>("get_instance"),
+                x => x.MatchCallvirt<Run>("get_selectedDifficulty"),
+                x => x.MatchLdcI4((int)DifficultyIndex.Eclipse8)
+            ))
+            {
+                Log.Error("Failed to find Eclipse 8 check (TakeDamageProcess)");
+                return;
+            }
+
+            behaviorCursor.Index = checkCursor.Index;
+            if (!behaviorCursor.TryGotoNext(
+                MoveType.Before,
+                x => x.MatchLdloc(13),
+                x => x.MatchLdarg(0),
+                x => x.MatchCall<HealthComponent>("get_fullCombinedHealth"),
+                x => x.MatchDiv(),
+                x => x.MatchLdcR4(100f),
+                x => x.MatchMul()
+            ))
+            {
+                Log.Error("Failed to find Eclipse 8 behavior (TakeDamageProcess)");
+                return;
+            }
+
+            // Emit check
+            checkCursor.Emit(OpCodes.Ldarg_0);
+            checkCursor.EmitDelegate<Func<HealthComponent, bool>>(selfHealthComponent =>
+            {
+                return votedForEclipse8.Any(
+                    el => el && el.master == selfHealthComponent.body.master);
+            });
+
+            // Emit jump
+            checkCursor.Emit(OpCodes.Brtrue, behaviorCursor.Next);
         }
 
         private static void PreGameControllerStartRun(Action<PreGameController> orig, PreGameController self)
@@ -347,12 +492,18 @@ namespace PartialEclipse
             votedForEclipse1.Clear();
             votedForEclipse2.Clear();
             votedForEclipse3.Clear();
+            votedForEclipse4.Clear();
             votedForEclipse5.Clear();
+            votedForEclipse6.Clear();
+            votedForEclipse7.Clear();
             votedForEclipse8.Clear();
             var choice1 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse1.On");
             var choice2 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse2.On");
             var choice3 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse3.On");
+            var choice4 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse4.On");
             var choice5 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse5.On");
+            var choice6 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse6.On");
+            var choice7 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse7.On");
             var choice8 = RuleCatalog.FindChoiceDef("Artifacts.PartialEclipse8.On");
             foreach (var user in NetworkUser.readOnlyInstancesList)
             {
@@ -376,10 +527,28 @@ namespace PartialEclipse
                     votedForEclipse3.Add(user);
                 }
 
+                var isEclipse4Voted = voteController.IsChoiceVoted(choice4);
+                if (isEclipse4Voted)
+                {
+                    votedForEclipse4.Add(user);
+                }
+
                 var isEclipse5Voted = voteController.IsChoiceVoted(choice5);
                 if (isEclipse5Voted)
                 {
                     votedForEclipse5.Add(user);
+                }
+
+                var isEclipse6Voted = voteController.IsChoiceVoted(choice6);
+                if (isEclipse6Voted)
+                {
+                    votedForEclipse6.Add(user);
+                }
+
+                var isEclipse7Voted = voteController.IsChoiceVoted(choice7);
+                if (isEclipse7Voted)
+                {
+                    votedForEclipse7.Add(user);
                 }
 
                 var isEclipse8Voted = voteController.IsChoiceVoted(choice8);
@@ -388,7 +557,7 @@ namespace PartialEclipse
                     votedForEclipse8.Add(user);
                 }
             }
-            System.Console.WriteLine(votedForEclipse8);
+            new SyncEclipse2(votedForEclipse2).Send(NetworkDestination.Clients);
             orig(self);
         }
 
@@ -428,50 +597,35 @@ namespace PartialEclipse
             Log.Init(Logger);
 
             // Also no longer needed because of .hasAuthority
-            //DoConfigs();
+            // DoConfigs();
 
             new PartialEclipse1Artifact();
             new PartialEclipse2Artifact();
             new PartialEclipse3Artifact();
+            new PartialEclipse4Artifact();
             new PartialEclipse5Artifact();
+            new PartialEclipse6Artifact();
+            new PartialEclipse7Artifact();
             new PartialEclipse8Artifact();
 
-            HookEndpointManager.Add(onStartServer, (orig, self) =>
-            {
-                orig(self);
-
-                if (!self.GetComponent<EclipseVoteSync>())
-                {
-                    self.gameObject.AddComponent<EclipseVoteSync>();
-                }
-            });
-
-            On.RoR2.NetworkUser.OnStartServer += (orig, self) =>
-            {
-                orig(self);
-
-                if (!self.GetComponent<EclipseVoteSync>())
-                {
-                    self.gameObject.AddComponent<EclipseVoteSync>();
-                }
-            };
+            NetworkingAPI.RegisterMessageType<SyncEclipse2>();
         }
 
-        public void Destroy()
+        public void OnDestroy()
         {
             // For finding who voted for what
             HookEndpointManager.Remove(startRun, PreGameControllerStartRun);
             // For Eclipse 1
-            HookEndpointManager.Unmodify(onBodyStart, OnBodyStart);
+            HookEndpointManager.Unmodify(onBodyStart, OnBodyStartEclipse1);
             // For Eclipse 2
-            HookEndpointManager.Unmodify(isBodyInChargingRadius, IsBodyInChargingRadiusEdit);
-            HookEndpointManager.Unmodify(doUpdate, DoUpdateEdit);
+            HookEndpointManager.Unmodify(isBodyInChargingRadius, IsBodyInChargingRadiusEclipse2);
+            HookEndpointManager.Unmodify(doUpdate, DoUpdateEclipse2);
             // For Eclipse 3
-            HookEndpointManager.Unmodify(onCharacterHitGroundServer, OnCharacterHitGroundServerEdit);
+            HookEndpointManager.Unmodify(onCharacterHitGroundServer, OnCharacterHitGroundServerEclipse3);
             // For Eclipse 5
-            HookEndpointManager.Unmodify(heal, Heal);
+            HookEndpointManager.Unmodify(heal, HealEclipse5);
             // For Eclipse 8
-            HookEndpointManager.Unmodify(damage, TakeDamageProcess);
+            HookEndpointManager.Unmodify(damage, TakeDamageProcessEclipse8);
         }
 
         public void Start()
@@ -479,22 +633,77 @@ namespace PartialEclipse
             // For finding who voted for what
             HookEndpointManager.Add(startRun, PreGameControllerStartRun);
             // For Eclipse 1
-            HookEndpointManager.Modify(onBodyStart, OnBodyStart);
+            HookEndpointManager.Modify(onBodyStart, OnBodyStartEclipse1);
             // For Eclipse 2
-            HookEndpointManager.Modify(isBodyInChargingRadius, IsBodyInChargingRadiusEdit);
-            HookEndpointManager.Modify(doUpdate, DoUpdateEdit);
+            HookEndpointManager.Modify(isBodyInChargingRadius, IsBodyInChargingRadiusEclipse2);
+            HookEndpointManager.Modify(doUpdate, DoUpdateEclipse2);
             // For Eclipse 3
-            HookEndpointManager.Modify(onCharacterHitGroundServer, OnCharacterHitGroundServerEdit);
+            HookEndpointManager.Modify(onCharacterHitGroundServer, OnCharacterHitGroundServerEclipse3);
+            // For Eclipse 4
+            HookEndpointManager.Modify(recalculateStats, RecalculateStatsEclipse4);
             // For Eclipse 5
-            HookEndpointManager.Modify(heal, Heal);
+            HookEndpointManager.Modify(heal, HealEclipse5);
+            // For Eclipse 6
+            //HookEndpointManager.Modify()
+            // For Eclipse 7
+            HookEndpointManager.Modify(recalculateStats, RecalculateStatsEclipse7);
             // For Eclipse 8
-            HookEndpointManager.Modify(damage, TakeDamageProcess);
+            HookEndpointManager.Modify(damage, TakeDamageProcessEclipse8);
+        }
+
+        public static void RegisterEclipse2(HashSet<NetworkUser> receivedVotes)
+        {
+            votedForEclipse2.Clear();
+            votedForEclipse2.UnionWith(receivedVotes);
         }
     }
 
-    public class EclipseVoteSync : NetworkBehaviour
+    public class SyncEclipse2 : INetMessage
     {
-        [SyncVar]
-        public bool votedForEclipse2;
+        HashSet<NetworkUser> votedForEclipse2 = new();
+
+        public SyncEclipse2()
+        {
+        }
+
+        public SyncEclipse2(HashSet<NetworkUser> votes)
+        {
+            votedForEclipse2 = [.. votes];
+        }
+
+        public void Deserialize(NetworkReader reader)
+        {
+            votedForEclipse2 = new HashSet<NetworkUser>();
+
+            int count = reader.ReadInt32();
+
+            for (int i = 0; i < count; i++)
+            {
+                var userObject = reader.ReadGameObject();
+
+                if (!userObject)
+                    continue;
+
+                var user = userObject.GetComponent<NetworkUser>();
+
+                if (user)
+                    votedForEclipse2.Add(user);
+            }
+        }
+
+        public void OnReceived()
+        {
+            PartialEclipse.RegisterEclipse2(votedForEclipse2);
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.Write(votedForEclipse2.Count);
+
+            foreach (NetworkUser user in votedForEclipse2)
+            {
+                writer.Write(user ? user.gameObject : null);
+            }
+        }
     }
 }

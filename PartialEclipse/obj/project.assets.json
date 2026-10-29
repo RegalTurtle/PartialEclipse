@@ -241,7 +241,28 @@
           }
         }
       },
-      "RiskOfRain2.GameLibs/1.4.1-r.0": {
+      "R2API.Networking/1.0.4": {
+        "type": "package",
+        "dependencies": {
+          "BepInEx.Core": "5.4.21",
+          "MMHOOK.RoR2": "2025.11.19",
+          "R2API.Core": "5.2.0",
+          "RiskOfRain2.GameLibs": "1.4.0-r.0",
+          "RoR2BepInExPack": "1.36.0",
+          "UnityEngine.Modules": "2021.3.33"
+        },
+        "compile": {
+          "lib/netstandard2.1/R2API.Networking.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/R2API.Networking.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "RiskOfRain2.GameLibs/1.5.0-r.1": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/AK.Wwise.Unity.API.WwiseTypes.dll": {},
@@ -250,6 +271,8 @@
           "lib/netstandard2.0/AK.Wwise.Unity.Timeline.dll": {},
           "lib/netstandard2.0/Ak.Wwise.Api.WAAPI.dll": {},
           "lib/netstandard2.0/Assembly-CSharp.dll": {},
+          "lib/netstandard2.0/AsyncManagement.dll": {},
+          "lib/netstandard2.0/Decalicious.dll": {},
           "lib/netstandard2.0/Grumpy.dll": {},
           "lib/netstandard2.0/HGCSharpUtils.dll": {},
           "lib/netstandard2.0/HGUnityUtils.dll": {},
@@ -261,6 +284,7 @@
           "lib/netstandard2.0/RoR2.dll": {},
           "lib/netstandard2.0/SimpleJSON.dll": {},
           "lib/netstandard2.0/Unity.Addressables.dll": {},
+          "lib/netstandard2.0/Unity.Postprocessing.Runtime.dll": {},
           "lib/netstandard2.0/Unity.ResourceManager.dll": {},
           "lib/netstandard2.0/Unity.TextMeshPro.dll": {},
           "lib/netstandard2.0/UnityEngine.UI.dll": {},
@@ -273,6 +297,8 @@
           "lib/netstandard2.0/AK.Wwise.Unity.Timeline.dll": {},
           "lib/netstandard2.0/Ak.Wwise.Api.WAAPI.dll": {},
           "lib/netstandard2.0/Assembly-CSharp.dll": {},
+          "lib/netstandard2.0/AsyncManagement.dll": {},
+          "lib/netstandard2.0/Decalicious.dll": {},
           "lib/netstandard2.0/Grumpy.dll": {},
           "lib/netstandard2.0/HGCSharpUtils.dll": {},
           "lib/netstandard2.0/HGUnityUtils.dll": {},
@@ -284,6 +310,7 @@
           "lib/netstandard2.0/RoR2.dll": {},
           "lib/netstandard2.0/SimpleJSON.dll": {},
           "lib/netstandard2.0/Unity.Addressables.dll": {},
+          "lib/netstandard2.0/Unity.Postprocessing.Runtime.dll": {},
           "lib/netstandard2.0/Unity.ResourceManager.dll": {},
           "lib/netstandard2.0/Unity.TextMeshPro.dll": {},
           "lib/netstandard2.0/UnityEngine.UI.dll": {},
@@ -1042,10 +1069,23 @@
         "r2api.language.nuspec"
       ]
     },
-    "RiskOfRain2.GameLibs/1.4.1-r.0": {
-      "sha512": "tHEoWsMc3DfbAcI0FH4sqGCgIcxGlbrIqwzM4a3d6wwRC2VIZntL1pJpkGjhZHdyf0It7wKYFkAQygfYltj0jg==",
+    "R2API.Networking/1.0.4": {
+      "sha512": "eepL4z1lDie2LrkSJfXGA2NvDkrlORFKWlvtXm453FdWDMHJjIZkmDm9l9RsgvCg4+WvRyqSneJRkW0/aHUNRg==",
       "type": "package",
-      "path": "riskofrain2.gamelibs/1.4.1-r.0",
+      "path": "r2api.networking/1.0.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/R2API.Networking.dll",
+        "lib/netstandard2.1/R2API.Networking.xml",
+        "r2api.networking.1.0.4.nupkg.sha512",
+        "r2api.networking.nuspec"
+      ]
+    },
+    "RiskOfRain2.GameLibs/1.5.0-r.1": {
+      "sha512": "fhheZL7gx5sDqc+PEHundf2FZhkSZNusz0xwgkulTfMnzYHptcqoFnQtNHqUazAU4WvAmAtQeTprfPNEFxR1gg==",
+      "type": "package",
+      "path": "riskofrain2.gamelibs/1.5.0-r.1",
       "files": [
         ".nupkg.metadata",
         "lib/netstandard2.0/AK.Wwise.Unity.API.WwiseTypes.dll",
@@ -1054,6 +1094,8 @@
         "lib/netstandard2.0/AK.Wwise.Unity.Timeline.dll",
         "lib/netstandard2.0/Ak.Wwise.Api.WAAPI.dll",
         "lib/netstandard2.0/Assembly-CSharp.dll",
+        "lib/netstandard2.0/AsyncManagement.dll",
+        "lib/netstandard2.0/Decalicious.dll",
         "lib/netstandard2.0/Grumpy.dll",
         "lib/netstandard2.0/HGCSharpUtils.dll",
         "lib/netstandard2.0/HGUnityUtils.dll",
@@ -1065,11 +1107,12 @@
         "lib/netstandard2.0/RoR2.dll",
         "lib/netstandard2.0/SimpleJSON.dll",
         "lib/netstandard2.0/Unity.Addressables.dll",
+        "lib/netstandard2.0/Unity.Postprocessing.Runtime.dll",
         "lib/netstandard2.0/Unity.ResourceManager.dll",
         "lib/netstandard2.0/Unity.TextMeshPro.dll",
         "lib/netstandard2.0/UnityEngine.UI.dll",
         "lib/netstandard2.0/com.unity.multiplayer-hlapi.Runtime.dll",
-        "riskofrain2.gamelibs.1.4.1-r.0.nupkg.sha512",
+        "riskofrain2.gamelibs.1.5.0-r.1.nupkg.sha512",
         "riskofrain2.gamelibs.nuspec"
       ]
     },
@@ -2984,12 +3027,13 @@
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.1": [
-      "BepInEx.Analyzers >= 1.0.*",
+      "BepInEx.Analyzers >= 1.0.8",
       "BepInEx.Core >= 5.4.21",
       "MMHOOK.RoR2 >= 2025.12.9",
       "R2API.ContentManagement >= 1.0.10",
       "R2API.Language >= 1.1.0",
-      "RiskOfRain2.GameLibs >= 1.4.1-r.0",
+      "R2API.Networking >= 1.0.4",
+      "RiskOfRain2.GameLibs >= 1.5.0-r.1",
       "Rune580.Mods.RiskOfRain2.RiskOfOptions >= 2.8.5",
       "UnityEngine.Modules >= 2021.3.33"
     ]
@@ -3002,11 +3046,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
+      "projectUniqueName": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
       "projectName": "PartialEclipse",
-      "projectPath": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
+      "projectPath": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\PartialEclipse.csproj",
       "packagesPath": "C:\\Users\\thysv\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\thysv\\source\\repos\\PartialEclipse\\PartialEclipse\\obj\\",
+      "outputPath": "C:\\Users\\thysv\\source\\PartialEclipse\\PartialEclipse\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -3025,6 +3069,7 @@
         "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {},
         "https://api.nuget.org/v3/index.json": {},
+        "https://nuget.bepinex.dev/v3/index.json": {},
         "https://nuget.bepinex.dev/v3/index.json": {}
       },
       "frameworks": {
@@ -3043,7 +3088,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "netstandard2.1": {
@@ -3053,7 +3098,7 @@
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
             "target": "Package",
-            "version": "[1.0.*, )"
+            "version": "[1.0.8, )"
           },
           "BepInEx.Core": {
             "target": "Package",
@@ -3074,9 +3119,13 @@
             "target": "Package",
             "version": "[1.1.0, )"
           },
+          "R2API.Networking": {
+            "target": "Package",
+            "version": "[1.0.4, )"
+          },
           "RiskOfRain2.GameLibs": {
             "target": "Package",
-            "version": "[1.4.1-r.0, )"
+            "version": "[1.5.0-r.1, )"
           },
           "Rune580.Mods.RiskOfRain2.RiskOfOptions": {
             "target": "Package",
@@ -3104,7 +3153,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.319\\RuntimeIdentifierGraph.json"
       }
     }
   }

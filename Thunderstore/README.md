@@ -23,5 +23,3 @@ Message me on discord if this stops working again, or if you have other question
 # TODO
 
 - Will be working on ways to implement E4, E6, & E7 one sided
-
-- Confirm if this is compatible with [CursedEcho](https://thunderstore.io/package/Prototype/CursedEcho/)

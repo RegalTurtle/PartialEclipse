@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PartialEclipse")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+542f21fd1b625c9a4df9da3f1d1ab9f4b6a698c5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2459862111ad93e0655a9bd9ccd9b5c893c76946")]
 [assembly: System.Reflection.AssemblyProductAttribute("PartialEclipse")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PartialEclipse")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
